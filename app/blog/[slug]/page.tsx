@@ -4,6 +4,7 @@ import { Calendar, Clock, User, ArrowLeft, Linkedin, Twitter, Facebook, Copy } f
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Navbar } from "@/app/components/navbar"
 
 // This would typically come from a CMS or database
 const blogPost = {
@@ -146,7 +147,7 @@ Remember: AI tools are powerful assistants, but they don't replace the critical 
 
 *What AI tools have you found most helpful in your studies? Share your experiences in the comments below or reach out to me on LinkedIn.*
   `,
-  author: "Kwame Asante",
+  author: "Yaw Asante",
   category: "AI Tools",
   date: "2024-01-15",
   readTime: "12 min read",
@@ -185,33 +186,7 @@ export default function BlogPostPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="font-bold text-xl text-gray-900">
-              Kwame Asante
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Home
-              </Link>
-              <Link href="/about" className="text-gray-700 hover:text-gray-900 transition-colors">
-                About
-              </Link>
-              <Link href="/blog" className="text-gray-900 font-medium">
-                Blog
-              </Link>
-              <Link href="/projects" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Projects
-              </Link>
-              <Link href="/contact" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Contact
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+      < Navbar />
       {/* Back to Blog */}
       <div className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -443,14 +418,14 @@ export default function BlogPostPage() {
                 <div className="flex-shrink-0">
                   <Image
                     src="/placeholder.svg?height=120&width=120&text=Author"
-                    alt="Kwame Asante"
+                    alt="Yaw Asante"
                     width={120}
                     height={120}
                     className="rounded-full"
                   />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">About Kwame Asante</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">About Yaw Asante</h3>
                   <p className="text-gray-600 mb-4 leading-relaxed">
                     MPhil Economics student at KNUST with a passion for making economics and AI accessible to everyone.
                     Specializes in applied econometrics, data science, and productivity tools for academic research.

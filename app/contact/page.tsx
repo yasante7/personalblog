@@ -5,37 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { Navbar } from "@/app/components/navbar"
 
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="font-bold text-xl text-gray-900">
-              Kwame Asante
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Home
-              </Link>
-              <Link href="/about" className="text-gray-700 hover:text-gray-900 transition-colors">
-                About
-              </Link>
-              <Link href="/blog" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Blog
-              </Link>
-              <Link href="/projects" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Projects
-              </Link>
-              <Link href="/contact" className="text-gray-900 font-medium">
-                Contact
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      < Navbar />
 
       {/* Header */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
@@ -102,7 +78,7 @@ export default function ContactPage() {
                     <Mail className="h-5 w-5 text-blue-600" />
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-gray-600">kwame.asante@student.knust.edu.gh</p>
+                      <p className="text-gray-600">Yaw.asante@student.knust.edu.gh</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -149,7 +125,7 @@ export default function ContactPage() {
                       </div>
                     </Link>
                     <Link
-                      href="mailto:kwame.asante@student.knust.edu.gh"
+                      href="mailto:Yaw.asante@student.knust.edu.gh"
                       className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       <Mail className="h-5 w-5 text-red-600" />

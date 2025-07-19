@@ -82,15 +82,15 @@ export default function BlogPage() {
   const regularPosts = blogPosts.filter((post) => !post.featured)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black">
       {/* Navigation */}
       <Navbar />
       
       {/* Header */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold mb-4">Blog</h1>
+          <p className="text-xl max-w-2xl mx-auto">
             Insights on AI tools, economics, data science, and student resources to help you succeed in your academic
             and professional journey.
           </p>
@@ -118,7 +118,7 @@ export default function BlogPage() {
       {/* Featured Posts */}
       <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Featured Posts</h2>
+          <h2 className="text-2xl font-bold mb-8">Featured Posts</h2>
           <div className="grid md:grid-cols-2 gap-8">
             {featuredPosts.map((post) => (
               <Card key={post.id} className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
@@ -129,7 +129,7 @@ export default function BlogPage() {
                   </div>
                 </div>
                 <CardHeader>
-                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-2">
+                  <div className="flex items-center gap-4 text-sm mb-2">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
                       {new Date(post.date).toLocaleDateString()}
@@ -143,7 +143,7 @@ export default function BlogPage() {
                       {post.category}
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">{post.title}</h3>
+                  <h3 className="text-xl font-bold mb-2 line-clamp-2">{post.title}</h3>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
@@ -191,12 +191,14 @@ export default function BlogPage() {
       </section>
 
       {/* Newsletter Signup */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-50">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Stay Updated</h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Get the latest insights on AI tools, economics, and student resources delivered to your inbox.
-          </p>
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-50 dark:bg-black">
+        < Card className="max-w-4xl mx-auto text-center p-8">
+          <CardHeader>
+            <h2 className="text-3xl font-bold text-blue-900 mb-4">Stay Updated</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+              Get the latest insights on AI tools, economics, and student resources delivered to your inbox.
+            </p>
+          </CardHeader>
           <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input
               type="email"
@@ -205,7 +207,7 @@ export default function BlogPage() {
             />
             <Button className="bg-blue-600 hover:bg-blue-700">Subscribe</Button>
           </div>
-        </div>
+        </Card>
       </section>
     </div>
   )

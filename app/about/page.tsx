@@ -3,6 +3,7 @@ import { GraduationCap, Code, TrendingUp, Users, Award, BookOpen } from "lucide-
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Navbar } from "@/app/components/navbar"
 
 export default function AboutPage() {
   const skills = [
@@ -10,57 +11,28 @@ export default function AboutPage() {
     "R",
     "Stata",
     "SPSS",
-    "Excel",
+    "GitHub",
+
+    "Typescript",
+    "Javascript",
+    "React",
+    "Next.js",
+    "Tailwind CSS",
     "SQL",
     "Tableau",
     "Power BI",
-    "Machine Learning",
-    "Econometrics",
-    "Time Series Analysis",
-    "Panel Data Analysis",
-    "ChatGPT",
-    "Claude",
-    "Notion",
-    "Obsidian",
-    "Git",
-    "GitHub",
+    "Prompt Engineering",
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="font-bold text-xl text-gray-900">
-              Kwame Asante
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Home
-              </Link>
-              <Link href="/about" className="text-gray-900 font-medium">
-                About
-              </Link>
-              <Link href="/blog" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Blog
-              </Link>
-              <Link href="/projects" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Projects
-              </Link>
-              <Link href="/contact" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Contact
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+      <Navbar />
       {/* Hero Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">About Me</h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
+          <h1 className="text-4xl font-bold mb-6">About Me</h1>
+          <p className="text-xl leading-relaxed">
             Passionate about bridging the gap between economic theory and practical technology applications
           </p>
         </div>
@@ -82,14 +54,19 @@ export default function AboutPage() {
                 <CardContent className="space-y-4">
                   <div>
                     <h3 className="font-semibold text-lg">MPhil Economics</h3>
-                    <p className="text-gray-600">Kwame Nkrumah University of Science and Technology (KNUST)</p>
-                    <p className="text-sm text-gray-500">2023 - Present</p>
+                    <p className="text-gray-300">Kwame Nkrumah University of Science and Technology (KNUST)</p>
+                    <p className="text-sm text-gray-500">2025 - Present</p>
                   </div>
                   <p className="text-gray-700 leading-relaxed">
                     Currently pursuing advanced studies in Economics with a focus on applied econometrics, development
                     economics, and the integration of AI tools in economic research. My thesis explores the impact of
                     digital financial services on economic development in Ghana.
                   </p>
+                  <div>
+                    <h3 className="font-semibold text-lg">BA Economics</h3>
+                    <p className="text-gray-300">Kwame Nkrumah University of Science and Technology (KNUST)</p>
+                    <p className="text-sm text-gray-500">2019 - 2023</p>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -108,11 +85,11 @@ export default function AboutPage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <div className="w-2 h-2 bg-green-600 rounded-full mt-2 flex-shrink-0"></div>
-                      <span>Development Economics and Financial Inclusion</span>
+                      <span>Environmental Economics</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <div className="w-2 h-2 bg-purple-600 rounded-full mt-2 flex-shrink-0"></div>
-                      <span>AI Applications in Economic Research</span>
+                      <span>AI and Productivity</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <div className="w-2 h-2 bg-orange-600 rounded-full mt-2 flex-shrink-0"></div>

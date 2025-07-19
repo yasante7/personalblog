@@ -4,6 +4,7 @@ import { ExternalLink, Github, Eye, Code, Database, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Navbar } from "../components/navbar"
 
 const projects = [
   {
@@ -117,32 +118,7 @@ export default function ProjectsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="font-bold text-xl text-gray-900">
-              Kwame Asante
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Home
-              </Link>
-              <Link href="/about" className="text-gray-700 hover:text-gray-900 transition-colors">
-                About
-              </Link>
-              <Link href="/blog" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Blog
-              </Link>
-              <Link href="/projects" className="text-gray-900 font-medium">
-                Projects
-              </Link>
-              <Link href="/contact" className="text-gray-700 hover:text-gray-900 transition-colors">
-                Contact
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Header */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
