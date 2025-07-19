@@ -19,7 +19,7 @@ export function Navbar() {
             <div className="flex justify-between items-center h-16">
                 <div className="font-bold text-xl text-gray-900 dark:text-white">
                     <Link href="/" className="flex items-center gap-2">
-                        <Image src="/logo.png" alt="Logo" width={50} height={50} />
+                        <Image src="/logo.png" alt="Logo" width={50} height={50} className='rounded-full filter invert dark:invert-0 transition-all duration-300' />
                         Yaw Asante
                     </Link>
                 </div>
