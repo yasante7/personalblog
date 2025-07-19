@@ -116,15 +116,15 @@ export default function ProjectsPage() {
   const otherProjects = projects.filter((project) => !project.featured)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black">
       {/* Navigation */}
       <Navbar />
 
       {/* Header */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-black">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Projects & Portfolio</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Projects & Portfolio</h1>
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
             A collection of my academic research, data science projects, and applications that bridge economics with
             modern technology. Each project demonstrates practical applications of economic theory and data analysis.
           </p>
@@ -134,7 +134,7 @@ export default function ProjectsPage() {
       {/* Featured Projects */}
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Featured Projects</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Featured Projects</h2>
           <div className="grid lg:grid-cols-2 gap-8">
             {featuredProjects.map((project) => (
               <Card key={project.id} className="hover:shadow-xl transition-shadow duration-300 overflow-hidden">
@@ -156,7 +156,7 @@ export default function ProjectsPage() {
                 <CardContent>
                   <p className="text-gray-600 mb-4 leading-relaxed">{project.description}</p>
                   <div className="mb-4">
-                    <h4 className="font-medium text-sm text-gray-900 mb-2">Tools Used:</h4>
+                    <h4 className="font-medium text-sm text-gray-900 dark:text-white mb-2">Tools Used:</h4>
                     <div className="flex flex-wrap gap-1">
                       {project.tools.map((tool) => (
                         <Badge key={tool} variant="outline" className="text-xs">
@@ -201,7 +201,7 @@ export default function ProjectsPage() {
       {/* Other Projects */}
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Other Projects</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Other Projects</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {otherProjects.map((project) => (
               <Card key={project.id} className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
@@ -257,18 +257,18 @@ export default function ProjectsPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900 text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Interested in Collaboration?</h2>
-          <p className="text-lg text-gray-300 mb-8">
-            I'm always open to discussing new projects, research opportunities, or ways to make economics and technology
-            more accessible to students and professionals.
-          </p>
-          <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
-            <Link href="/contact">Get In Touch</Link>
-          </Button>
-        </div>
-      </section>
+      <Card className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-black">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-4">Interested in Collaboration?</h2>
+            <p className="text-lg mb-8">
+              I'm always open to discussing new projects, research opportunities, or ways to make economics and technology
+              more accessible to students and professionals.
+            </p>
+            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
+              <Link href="/contact">Get In Touch</Link>
+            </Button>
+          </div>
+        </Card>
     </div>
   )
 }

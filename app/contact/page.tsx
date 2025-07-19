@@ -9,15 +9,15 @@ import { Navbar } from "@/app/components/navbar"
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black">
       {/* Navigation */}
       < Navbar />
 
       {/* Header */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h1>
-          <p className="text-xl text-gray-600">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Get In Touch</h1>
+          <p className="text-xl text-gray-600 dark:text-gray-400">
             I'd love to hear from you! Whether you have questions about my research, want to collaborate on a project,
             or just want to connect, feel free to reach out.
           </p>
@@ -78,7 +78,7 @@ export default function ContactPage() {
                     <Mail className="h-5 w-5 text-blue-600" />
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-gray-600">Yaw.asante@student.knust.edu.gh</p>
+                      <p className="text-gray-600">yasante2@student.knust.edu.gh</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -106,7 +106,7 @@ export default function ContactPage() {
                   <div className="space-y-3">
                     <Link
                       href="#"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-500 transition-colors"
                     >
                       <Linkedin className="h-5 w-5 text-blue-600" />
                       <div>
@@ -116,7 +116,7 @@ export default function ContactPage() {
                     </Link>
                     <Link
                       href="#"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-500 transition-colors"
                     >
                       <Github className="h-5 w-5 text-gray-900" />
                       <div>
@@ -126,7 +126,7 @@ export default function ContactPage() {
                     </Link>
                     <Link
                       href="mailto:Yaw.asante@student.knust.edu.gh"
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-500 transition-colors"
                     >
                       <Mail className="h-5 w-5 text-red-600" />
                       <div>
@@ -166,9 +166,9 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-black">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">Frequently Asked Questions</h2>
           <div className="space-y-6">
             <Card>
               <CardContent className="p-6">
