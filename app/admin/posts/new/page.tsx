@@ -12,6 +12,13 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { supabase, testConnection } from "@/lib/supabase"
 import { toast } from "sonner" // Install: npm install sonner
+import dynamic from "next/dynamic"
+
+// Dynamically import the MD editor to avoid SSR issues
+const MDEditor = dynamic(
+  () => import("@uiw/react-md-editor").then((mod) => mod.default),
+  { ssr: false }
+)
 
 const categories = ["AI Tools", "Economics", "Data Science", "Student Perks", "Productivity"]
 
@@ -249,18 +256,93 @@ export default function NewPost() {
             {/* Content Editor */}
             <Card>
               <CardHeader>
-                <CardTitle>Content *</CardTitle>
+                <div className="flex justify-between items-center">
+                  <CardTitle>Content *</CardTitle>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        const sampleContent = `# Your Blog Post Title
+
+## Introduction
+Write your introduction here...
+
+## Main Content
+
+### Subheading
+- Bullet point 1
+- Bullet point 2
+- Bullet point 3
+
+### Code Example
+\`\`\`javascript
+console.log("Hello, World!");
+\`\`\`
+
+### Important Note
+> This is a blockquote for important information.
+
+## Conclusion
+Wrap up your thoughts here...
+
+---
+
+**Tags:** #economics #ai #technology`
+                        setContent(sampleContent)
+                        toast.success("Sample content added!")
+                      }}
+                    >
+                      Add Sample
+                    </Button>
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
-                <Textarea
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Write your post content here... (Markdown supported)"
-                  rows={20}
-                  className="font-mono text-sm"
-                  required
-                />
-                <p className="text-xs text-gray-500 mt-2">Supports Markdown formatting. {content.length} characters</p>
+                <div className="w-full" data-color-mode="light">
+                  <MDEditor
+                    value={content}
+                    onChange={(val) => setContent(val || "")}
+                    preview="edit"
+                    hideToolbar={false}
+                    visibleDragbar={false}
+                    textareaProps={{
+                      placeholder: `# Your Blog Post Title
+
+## Introduction
+Start writing your blog post here...
+
+Use **bold text**, *italic text*, and [links](https://example.com).
+
+### Features available:
+- Headers (# ## ###)
+- Lists and bullet points  
+- Code blocks and inline code
+- Blockquotes
+- Images and links
+- Tables
+- And much more!
+
+Start typing to see the live preview!`,
+                      style: {
+                        fontSize: 14,
+                        lineHeight: 1.5,
+                        fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                        resize: 'none'
+                      }
+                    }}
+                    height={600}
+                    data-color-mode="light"
+                  />
+                </div>
+                <div className="flex justify-between items-center mt-3">
+                  <p className="text-xs text-gray-500">
+                    Full Markdown support with live preview. {content.length} characters
+                  </p>
+                  <div className="flex gap-2 text-xs text-gray-500">
+                    <span>💡 Tip: Use Ctrl+B for bold, Ctrl+I for italic</span>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>

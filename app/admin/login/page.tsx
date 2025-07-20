@@ -16,10 +16,6 @@ export default function AdminLogin() {
         against ${process.env.NEXT_PUBLIC_ADMIN_USERNAME} and ${process.env.NEXT_PUBLIC_ADMIN_PASSWORD}`);
     }
   };
-  console.log("USERNAME ENV:", process.env.NEXT_PUBLIC_ADMIN_USERNAME);
-  console.log("PASSWORD ENV:", process.env.NEXT_PUBLIC_ADMIN_PASSWORD);
-  console.log("USERNAME STATE:", username);
-  console.log("PASSWORD STATE:", password);
   return (
     <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Admin Login</h1>
