@@ -1,73 +1,33 @@
+"use client"
+
 import Link from "next/link"
 import { Plus, Search, Filter, Edit, Trash2, Eye, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import { usePosts } from '@/hooks/retriever'
 
 // Mock data - in a real app, this would come from your database
-const blogPosts = [
-  {
-    id: 1,
-    title: "10 AI Tools Every Economics Student Should Know in 2024",
-    slug: "10-ai-tools-economics-students-2024",
-    category: "AI Tools",
-    status: "published",
-    views: 1234,
-    comments: 15,
-    date: "2024-01-15",
-    lastModified: "2024-01-16",
-  },
-  {
-    id: 2,
-    title: "Understanding Causal Inference: A Beginner's Guide with Python",
-    slug: "causal-inference-python-guide",
-    category: "Data Science",
-    status: "published",
-    views: 892,
-    comments: 8,
-    date: "2024-01-10",
-    lastModified: "2024-01-12",
-  },
-  {
-    id: 3,
-    title: "Student Discounts and Perks: Ultimate Guide for KNUST Students",
-    slug: "student-discounts-knust-guide",
-    category: "Student Perks",
-    status: "draft",
-    views: 0,
-    comments: 0,
-    date: "2024-01-08",
-    lastModified: "2024-01-08",
-  },
-  {
-    id: 4,
-    title: "Ghana's Economic Growth: What the Data Really Shows",
-    slug: "ghana-economic-growth-analysis",
-    category: "Economics",
-    status: "published",
-    views: 567,
-    comments: 12,
-    date: "2023-12-28",
-    lastModified: "2023-12-30",
-  },
-  {
-    id: 5,
-    title: "Building Your First Econometric Model in Python",
-    slug: "first-econometric-model-python",
-    category: "Data Science",
-    status: "scheduled",
-    views: 0,
-    comments: 0,
-    date: "2024-01-20",
-    lastModified: "2024-01-14",
-  },
-]
-
-const categories = ["All", "AI Tools", "Economics", "Data Science", "Student Perks", "Productivity"]
-const statuses = ["All", "Published", "Draft", "Scheduled"]
-
 export default function PostsManagement() {
+  const { posts, loading, error, refetch } = usePosts()
+
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error}</div>
+  const blogPosts = posts.map(post => ({
+    id: post.id,
+    title: post.title,
+    slug: post.slug,
+    date: post.created_at,
+    views: post.views,
+    comments: 0, // Placeholder for comments count
+    lastModified: post.updated_at,
+    status: post.status,
+    category: post.category || 'Uncategorized'
+  }))
+  const categories = ['All Categories', 'Economics', 'AI', 'Technology', 'Education']
+  const statuses = ['All Statuses', 'Draft', 'Published', 'Scheduled']
+  console.log('Blog Posts:', blogPosts)
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Admin Header */}

@@ -2,17 +2,22 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Save, Eye, ArrowLeft, Upload, X } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { Save, Eye, ArrowLeft, Upload, X, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
+import { supabase, testConnection } from "@/lib/supabase"
+import { toast } from "sonner" // Install: npm install sonner
 
 const categories = ["AI Tools", "Economics", "Data Science", "Student Perks", "Productivity"]
 
 export default function NewPost() {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
   const [title, setTitle] = useState("")
   const [slug, setSlug] = useState("")
   const [excerpt, setExcerpt] = useState("")
@@ -20,8 +25,11 @@ export default function NewPost() {
   const [category, setCategory] = useState("")
   const [tags, setTags] = useState<string[]>([])
   const [newTag, setNewTag] = useState("")
-  const [status, setStatus] = useState("draft")
+  const [status, setStatus] = useState<"draft" | "published" | "scheduled">("draft")
   const [featuredImage, setFeaturedImage] = useState("")
+  const [publishDate, setPublishDate] = useState("")
+  const [metaTitle, setMetaTitle] = useState("")
+  const [metaDescription, setMetaDescription] = useState("")
 
   const generateSlug = (title: string) => {
     return title
@@ -50,10 +58,106 @@ export default function NewPost() {
     setTags(tags.filter((tag) => tag !== tagToRemove))
   }
 
-  const handleSave = (saveStatus: string) => {
-    // In a real app, this would save to your database
-    console.log("Saving post with status:", saveStatus)
-    // Redirect to posts list or show success message
+  const validateForm = () => {
+    if (!title.trim()) {
+      toast.error("Title is required")
+      return false
+    }
+    if (!slug.trim()) {
+      toast.error("Slug is required")
+      return false
+    }
+    if (!content.trim()) {
+      toast.error("Content is required")
+      return false
+    }
+    return true
+  }
+
+  const handleSave = async (saveStatus: "draft" | "published" | "scheduled") => {
+    if (!validateForm()) return
+
+    setIsLoading(true)
+
+    try {
+      console.log('Starting save process...')
+      
+      // Test connection first
+      const connectionTest = await testConnection()
+      if (!connectionTest.success) {
+        console.error('Connection test failed:', connectionTest.error)
+        toast.error("Database connection failed. Check your Supabase configuration.")
+        setIsLoading(false)
+        return
+      }
+
+      console.log('Connection test passed')
+
+      // Check if slug already exists
+      console.log('Checking for existing slug:', slug)
+      const { data: existingPost, error: slugError } = await supabase
+        .from('posts')
+        .select('id')
+        .eq('slug', slug)
+        .maybeSingle()
+
+      if (slugError) {
+        console.error('Slug check error:', slugError)
+        toast.error("Error checking slug: " + (slugError.message || 'Unknown error'))
+        setIsLoading(false)
+        return
+      }
+
+      if (existingPost) {
+        toast.error("A post with this slug already exists")
+        setIsLoading(false)
+        return
+      }
+
+      console.log('Slug is unique, proceeding with save...')
+
+      const postData = {
+        title: title.trim(),
+        slug: slug.trim(),
+        content: content.trim(),
+        excerpt: excerpt.trim() || null,
+        status: saveStatus,
+        category: category || null,
+        tags: tags.length > 0 ? tags : null,
+        cover_image: featuredImage || null,
+        published_at: saveStatus === 'published' ? new Date().toISOString() : 
+                     saveStatus === 'scheduled' && publishDate ? new Date(publishDate).toISOString() : null,
+        author_id: null,
+        is_featured: false,
+        views: 0
+      }
+
+      console.log('Attempting to insert:', postData)
+
+      const { data, error } = await supabase
+        .from('posts')
+        .insert([postData])
+        .select()
+        .single()
+
+      if (error) {
+        console.error('Insert error:', error)
+        toast.error("Failed to save post: " + (error.message || 'Unknown error'))
+        setIsLoading(false)
+        return
+      }
+
+      console.log('Post saved successfully:', data)
+      toast.success(`Post ${saveStatus === 'published' ? 'published' : 'saved'} successfully!`)
+      
+      router.push('/admin/posts')
+
+    } catch (error) {
+      console.error('Unexpected error:', error)
+      toast.error("An unexpected error occurred: " + (error instanceof Error ? error.message : 'Unknown error'))
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -72,15 +176,25 @@ export default function NewPost() {
               <h1 className="text-xl font-bold text-gray-900">New Blog Post</h1>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={() => handleSave("draft")}>
-                <Save className="h-4 w-4 mr-2" />
+              <Button 
+                variant="outline" 
+                onClick={() => handleSave("draft")}
+                disabled={isLoading}
+              >
+                {isLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
                 Save Draft
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" disabled={!content}>
                 <Eye className="h-4 w-4 mr-2" />
                 Preview
               </Button>
-              <Button onClick={() => handleSave("published")}>Publish</Button>
+              <Button 
+                onClick={() => handleSave("published")}
+                disabled={isLoading}
+              >
+                {isLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+                Publish
+              </Button>
             </div>
           </div>
         </div>
@@ -97,18 +211,25 @@ export default function NewPost() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="title">Title</Label>
+                  <Label htmlFor="title">Title *</Label>
                   <Input
                     id="title"
                     value={title}
                     onChange={(e) => handleTitleChange(e.target.value)}
                     placeholder="Enter post title..."
                     className="text-lg"
+                    required
                   />
                 </div>
                 <div>
-                  <Label htmlFor="slug">URL Slug</Label>
-                  <Input id="slug" value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="post-url-slug" />
+                  <Label htmlFor="slug">URL Slug *</Label>
+                  <Input 
+                    id="slug" 
+                    value={slug} 
+                    onChange={(e) => setSlug(e.target.value)} 
+                    placeholder="post-url-slug"
+                    required
+                  />
                   <p className="text-xs text-gray-500 mt-1">URL: yoursite.com/blog/{slug || "post-url-slug"}</p>
                 </div>
                 <div>
@@ -128,7 +249,7 @@ export default function NewPost() {
             {/* Content Editor */}
             <Card>
               <CardHeader>
-                <CardTitle>Content</CardTitle>
+                <CardTitle>Content *</CardTitle>
               </CardHeader>
               <CardContent>
                 <Textarea
@@ -137,6 +258,7 @@ export default function NewPost() {
                   placeholder="Write your post content here... (Markdown supported)"
                   rows={20}
                   className="font-mono text-sm"
+                  required
                 />
                 <p className="text-xs text-gray-500 mt-2">Supports Markdown formatting. {content.length} characters</p>
               </CardContent>
@@ -156,7 +278,7 @@ export default function NewPost() {
                   <select
                     id="status"
                     value={status}
-                    onChange={(e) => setStatus(e.target.value)}
+                    onChange={(e) => setStatus(e.target.value as "draft" | "published" | "scheduled")}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     aria-label="Post status"
                   >
@@ -166,6 +288,7 @@ export default function NewPost() {
                   </select>
                 </div>
                 <div>
+                  <Label htmlFor="category">Category</Label>
                   <select
                     id="category"
                     value={category}
@@ -184,7 +307,12 @@ export default function NewPost() {
                 {status === "scheduled" && (
                   <div>
                     <Label htmlFor="publishDate">Publish Date</Label>
-                    <Input id="publishDate" type="datetime-local" />
+                    <Input 
+                      id="publishDate" 
+                      type="datetime-local" 
+                      value={publishDate}
+                      onChange={(e) => setPublishDate(e.target.value)}
+                    />
                   </div>
                 )}
               </CardContent>
@@ -257,11 +385,24 @@ export default function NewPost() {
               <CardContent className="space-y-4">
                 <div>
                   <Label htmlFor="metaTitle">Meta Title</Label>
-                  <Input id="metaTitle" placeholder="SEO title..." maxLength={60} />
+                  <Input 
+                    id="metaTitle" 
+                    placeholder="SEO title..." 
+                    maxLength={60}
+                    value={metaTitle}
+                    onChange={(e) => setMetaTitle(e.target.value)}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="metaDescription">Meta Description</Label>
-                  <Textarea id="metaDescription" placeholder="SEO description..." rows={3} maxLength={160} />
+                  <Textarea 
+                    id="metaDescription" 
+                    placeholder="SEO description..." 
+                    rows={3} 
+                    maxLength={160}
+                    value={metaDescription}
+                    onChange={(e) => setMetaDescription(e.target.value)}
+                  />
                 </div>
               </CardContent>
             </Card>
