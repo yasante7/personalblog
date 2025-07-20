@@ -3,11 +3,6 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-console.log('Environment check:')
-console.log('Supabase URL:', supabaseUrl)
-console.log('Supabase Key:', supabaseKey ? `${supabaseKey.substring(0, 10)}...` : 'Not set')
-console.log('All env vars:', Object.keys(process.env).filter(key => key.includes('SUPABASE')))
-
 if (!supabaseUrl || !supabaseKey) {
   console.error('Missing environment variables!')
   throw new Error('Missing Supabase environment variables')
