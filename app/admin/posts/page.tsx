@@ -7,10 +7,43 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { usePosts } from '@/hooks/retriever'
+import { supabase } from '@/lib/supabase'
+import { toast } from 'sonner'
+import { useState } from 'react'
 
 // Mock data - in a real app, this would come from your database
 export default function PostsManagement() {
   const { posts, loading, error, refetch } = usePosts()
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
+  const handleDelete = async (postId: string, postTitle: string) => {
+    if (!confirm(`Are you sure you want to delete "${postTitle}"? This action cannot be undone.`)) {
+      return
+    }
+
+    setDeletingId(postId)
+    
+    try {
+      const { error } = await supabase
+        .from('posts')
+        .delete()
+        .eq('id', postId)
+
+      if (error) {
+        console.error('Error deleting post:', error)
+        toast.error('Failed to delete post')
+        return
+      }
+
+      toast.success('Post deleted successfully')
+      refetch() // Refresh the posts list
+    } catch (error) {
+      console.error('Error deleting post:', error)
+      toast.error('Failed to delete post')
+    } finally {
+      setDeletingId(null)
+    }
+  }
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
@@ -151,8 +184,18 @@ export default function PostsManagement() {
                         <Edit className="h-4 w-4" />
                       </Link>
                     </Button>
-                    <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700 bg-transparent">
-                      <Trash2 className="h-4 w-4" />
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="text-red-600 hover:text-red-700 bg-transparent"
+                      onClick={() => handleDelete(post.id, post.title)}
+                      disabled={deletingId === post.id}
+                    >
+                      {deletingId === post.id ? (
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-red-600 border-t-transparent" />
+                      ) : (
+                        <Trash2 className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                 </div>
