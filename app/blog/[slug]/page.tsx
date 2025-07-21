@@ -88,11 +88,11 @@ export default function BlogPostPage() {
   const readTime = Math.ceil((post.content?.length || 0) / 1000) + " min read"
   const publishedDate = post.published_at ? new Date(post.published_at) : new Date(post.created_at)
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black">
       {/* Navigation */}
       < Navbar />
       {/* Back to Blog */}
-      <div className="bg-white border-b">
+      <div className="border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <Button variant="ghost" asChild className="text-gray-600 hover:text-gray-900">
             <Link href="/blog">
@@ -104,7 +104,7 @@ export default function BlogPostPage() {
       </div>
 
       {/* Article Header */}
-      <article className="bg-white">
+      <article className="bg-white dark:bg-black">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Category Badge */}
           {post.category && (
@@ -168,7 +168,7 @@ export default function BlogPostPage() {
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="text-blue-600 hover:bg-blue-50 bg-transparent"
+                className="text-blue-600 hover:bg-black-50 bg-transparent"
                 onClick={() => handleShare('linkedin')}
               >
                 <Linkedin className="h-4 w-4 mr-1" />
@@ -207,7 +207,7 @@ export default function BlogPostPage() {
       </article>
 
       {/* Article Content */}
-      <div className="bg-white">
+      <div className="bg-white dark:bg-black py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <div className="prose prose-lg prose-gray max-w-none">
             <div className="text-xl text-gray-600 mb-8 leading-relaxed font-light">{post.excerpt}</div>
@@ -234,17 +234,17 @@ export default function BlogPostPage() {
                   <li className="text-gray-800">{children}</li>
                 ),
                 blockquote: ({ children }) => (
-                  <blockquote className="border-l-4 border-blue-400 pl-4 py-2 my-6 bg-blue-50 text-blue-800">
+                  <blockquote className="border-l-4 border-blue-400 pl-4 py-2 my-6 bg-gray-100 dark:bg-gray-800 text-white">
                     {children}
                   </blockquote>
                 ),
                 code: ({ children }) => (
-                  <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-gray-800">
+                  <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm font-mono">
                     {children}
                   </code>
                 ),
                 pre: ({ children }) => (
-                  <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto mb-4">
+                  <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-4">
                     {children}
                   </pre>
                 ),
@@ -275,7 +275,7 @@ export default function BlogPostPage() {
       </div>
 
       {/* Author Bio */}
-      <section className="bg-gray-50 py-12">
+      <section className="bg-gray-50 dark:bg-black py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card>
             <CardContent className="p-8">
@@ -311,7 +311,7 @@ export default function BlogPostPage() {
       </section>
 
       {/* Related Posts */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-black">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Articles</h2>
           <div className="grid md:grid-cols-3 gap-6">
@@ -337,9 +337,9 @@ export default function BlogPostPage() {
       </section>
 
       {/* Newsletter CTA */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <Card className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-50 dark:bg-black">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Never Miss an Update</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">Never Miss an Update</h2>
           <p className="text-lg text-gray-600 mb-8">
             Get the latest insights on AI tools, economics, and student resources delivered to your inbox weekly.
           </p>
@@ -353,7 +353,7 @@ export default function BlogPostPage() {
           </div>
           <p className="text-sm text-gray-500 mt-4">Join 500+ students already subscribed. Unsubscribe anytime.</p>
         </div>
-      </section>
+      </Card>
     </div>
   )
 }
