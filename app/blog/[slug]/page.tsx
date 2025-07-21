@@ -339,7 +339,7 @@ export default function BlogPostPage() {
       {/* Newsletter CTA */}
       <Card className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-50 dark:bg-black">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Never Miss an Update</h2>
+          <h2 className="text-3xl font-bold mb-4">Never Miss an Update</h2>
           <p className="text-lg text-gray-600 mb-8">
             Get the latest insights on AI tools, economics, and student resources delivered to your inbox weekly.
           </p>
