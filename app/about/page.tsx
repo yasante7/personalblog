@@ -54,17 +54,17 @@ export default function AboutPage() {
                 <CardContent className="space-y-4">
                   <div>
                     <h3 className="font-semibold text-lg">MPhil Economics</h3>
-                    <p className="text-gray-300">Kwame Nkrumah University of Science and Technology (KNUST)</p>
+                    <p className="text-gray-600 dark:text-gray-300">Kwame Nkrumah University of Science and Technology (KNUST)</p>
                     <p className="text-sm text-gray-500">2025 - Present</p>
                   </div>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-gray-700 dark:text-gray-400 leading-relaxed">
                     Currently pursuing advanced studies in Economics with a focus on applied econometrics, development
                     economics, and the integration of AI tools in economic research. My thesis explores the impact of
                     digital financial services on economic development in Ghana.
                   </p>
                   <div>
                     <h3 className="font-semibold text-lg">BA Economics</h3>
-                    <p className="text-gray-300">Kwame Nkrumah University of Science and Technology (KNUST)</p>
+                    <p className="text-gray-600 dark:text-gray-300">Kwame Nkrumah University of Science and Technology (KNUST)</p>
                     <p className="text-sm text-gray-500">2019 - 2023</p>
                   </div>
                 </CardContent>
@@ -78,7 +78,7 @@ export default function AboutPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-3 text-gray-700">
+                  <ul className="space-y-3 text-gray-700 dark:text-gray-400">
                     <li className="flex items-start gap-2">
                       <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
                       <span>Applied Econometrics and Causal Inference</span>
@@ -107,12 +107,12 @@ export default function AboutPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700 leading-relaxed mb-4">
+                  <p className="text-gray-700 dark:text-gray-400 leading-relaxed mb-4">
                     I believe that economics and technology should be accessible to everyone, not just academics. My
                     mission is to bridge the gap between complex economic theories and practical applications that can
                     benefit students, professionals, and policymakers.
                   </p>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-gray-700 dark:text-gray-400 leading-relaxed">
                     Through my blog, projects, and resources, I aim to democratize knowledge and empower others to
                     leverage data science and AI tools in their economic analysis and decision-making processes.
                   </p>
@@ -150,15 +150,15 @@ export default function AboutPage() {
                 <CardContent className="space-y-3">
                   <div>
                     <h4 className="font-medium">Dean's List</h4>
-                    <p className="text-sm text-gray-600">KNUST Economics Department</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">KNUST Economics Department</p>
                   </div>
                   <div>
                     <h4 className="font-medium">Research Assistant</h4>
-                    <p className="text-sm text-gray-600">Economic Policy Research Centre</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Economic Policy Research Centre</p>
                   </div>
                   <div>
                     <h4 className="font-medium">Python Certification</h4>
-                    <p className="text-sm text-gray-600">Data Science Specialization</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Data Science Specialization</p>
                   </div>
                 </CardContent>
               </Card>
@@ -173,15 +173,15 @@ export default function AboutPage() {
                 <CardContent className="space-y-3">
                   <div>
                     <h4 className="font-medium text-sm">Digital Finance Impact Study</h4>
-                    <p className="text-xs text-gray-600">Thesis research on mobile money adoption</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">Thesis research on mobile money adoption</p>
                   </div>
                   <div>
                     <h4 className="font-medium text-sm">AI Tools for Students</h4>
-                    <p className="text-xs text-gray-600">Curating productivity resources</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">Curating productivity resources</p>
                   </div>
                   <div>
                     <h4 className="font-medium text-sm">Economics Blog</h4>
-                    <p className="text-xs text-gray-600">Making economics accessible</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">Making economics accessible</p>
                   </div>
                 </CardContent>
               </Card>

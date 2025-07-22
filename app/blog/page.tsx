@@ -121,7 +121,7 @@ export default function BlogPage() {
                     <h3 className="text-xl font-bold mb-2 line-clamp-2">{post.title}</h3>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
+                    <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">{post.excerpt}</p>
                     <Button variant="outline" className="w-full bg-transparent" asChild>
                       <Link href={`/blog/${post.slug}`}>
                         Read More <ArrowRight className="ml-2 h-4 w-4" />
@@ -138,7 +138,7 @@ export default function BlogPage() {
       {/* Regular Posts */}
       <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">
             {featuredPosts.length > 0 ? "Recent Posts" : "All Posts"}
           </h2>
           {regularPosts.length > 0 ? (
@@ -149,7 +149,7 @@ export default function BlogPage() {
                     <Image src={post.cover_image || "/placeholder.svg"} alt={post.title} fill className="object-cover" />
                   </div>
                   <CardHeader className="pb-2">
-                    <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-2">
                       {post.category && (
                         <Badge variant="secondary" className="text-xs">
                           {post.category}
@@ -159,10 +159,10 @@ export default function BlogPage() {
                       <span>•</span>
                       <span>{post.views} views</span>
                     </div>
-                    <h3 className="font-semibold text-gray-900 line-clamp-2 text-sm">{post.title}</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 text-sm">{post.title}</h3>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <p className="text-gray-600 text-sm line-clamp-2 mb-3">{post.excerpt}</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 mb-3">{post.excerpt}</p>
                     <Button variant="ghost" size="sm" className="p-0 h-auto text-blue-600 hover:text-blue-700" asChild>
                       <Link href={`/blog/${post.slug}`}>
                         Read More <ArrowRight className="ml-1 h-3 w-3" />

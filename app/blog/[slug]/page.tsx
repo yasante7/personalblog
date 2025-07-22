@@ -94,7 +94,7 @@ export default function BlogPostPage() {
       {/* Back to Blog */}
       <div className="border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Button variant="ghost" asChild className="text-gray-600 hover:text-gray-900">
+          <Button variant="ghost" asChild className="text-gray-600 dark:text-gray-400 hover:text-gray-900">
             <Link href="/blog">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Blog
@@ -116,12 +116,12 @@ export default function BlogPostPage() {
           )}
 
           {/* Title */}
-          <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
             {post.title}
           </h1>
 
           {/* Meta Information */}
-          <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-8">
+          <div className="flex flex-wrap items-center gap-6 text-gray-600 dark:text-gray-400 mb-8">
             <div className="flex items-center gap-2">
               <User className="h-4 w-4" />
               <span>Yaw Asante</span>
@@ -163,12 +163,12 @@ export default function BlogPostPage() {
 
           {/* Share Buttons */}
           <div className="flex items-center gap-4 mb-8 pb-8 border-b">
-            <span className="text-sm font-medium text-gray-700">Share this article:</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-400">Share this article:</span>
             <div className="flex gap-2">
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="text-blue-600 hover:bg-black-50 bg-transparent"
+                className="text-blue-600 hover:bg-blue-50 dark:text-blue-400 bg-transparent"
                 onClick={() => handleShare('linkedin')}
               >
                 <Linkedin className="h-4 w-4 mr-1" />
@@ -177,7 +177,7 @@ export default function BlogPostPage() {
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="text-blue-400 hover:bg-blue-50 bg-transparent"
+                className="text-blue-400 hover:bg-blue-50 dark:text-blue-400 bg-transparent"
                 onClick={() => handleShare('twitter')}
               >
                 <Twitter className="h-4 w-4 mr-1" />
@@ -186,7 +186,7 @@ export default function BlogPostPage() {
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="text-blue-800 hover:bg-blue-50 bg-transparent"
+                className="text-blue-800 hover:bg-blue-50 dark:text-blue-400 bg-transparent"
                 onClick={() => handleShare('facebook')}
               >
                 <Facebook className="h-4 w-4 mr-1" />
@@ -210,28 +210,36 @@ export default function BlogPostPage() {
       <div className="bg-white dark:bg-black py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <div className="prose prose-lg prose-gray max-w-none">
-            <div className="text-xl text-gray-600 mb-8 leading-relaxed font-light">{post.excerpt}</div>
+            <div className="text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed font-light">{post.excerpt}</div>
             
             {/* Render markdown content */}
             <ReactMarkdown
               components={{
+                h1: ({ children }) => (
+                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 mt-10">{children}</h1>
+                ),
+
                 h2: ({ children }) => (
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4 mt-8">{children}</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-400 mb-4 mt-8">{children}</h2>
                 ),
                 h3: ({ children }) => (
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 mt-6">{children}</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-400 mb-3 mt-6">{children}</h3>
                 ),
                 p: ({ children }) => (
-                  <p className="mb-4 text-gray-800 leading-relaxed">{children}</p>
+                  <p className="mb-4 text-gray-800 dark:text-gray-400 leading-relaxed">{children}</p>
                 ),
                 ul: ({ children }) => (
-                  <ul className="list-disc pl-6 mb-4 space-y-2">{children}</ul>
+                  <ul className="list-disc pl-6 text-gray-900 dark:text-gray-300 mb-4 space-y-2">
+                    {children}
+                  </ul>
                 ),
                 ol: ({ children }) => (
-                  <ol className="list-decimal pl-6 mb-4 space-y-2">{children}</ol>
+                  <ol className="list-decimal pl-6 text-gray-900 dark:text-gray-300 mb-4 space-y-2">
+                    {children}
+                  </ol>
                 ),
                 li: ({ children }) => (
-                  <li className="text-gray-800">{children}</li>
+                  <li className="text-gray-800 dark:text-gray-300">{children}</li>
                 ),
                 blockquote: ({ children }) => (
                   <blockquote className="border-l-4 border-blue-400 pl-4 py-2 my-6 bg-gray-100 dark:bg-gray-800 text-white">
@@ -249,10 +257,10 @@ export default function BlogPostPage() {
                   </pre>
                 ),
                 strong: ({ children }) => (
-                  <strong className="font-semibold text-gray-900">{children}</strong>
+                  <strong className="font-semibold text-gray-900 dark:text-gray-100">{children}</strong>
                 ),
                 em: ({ children }) => (
-                  <em className="italic text-gray-700">{children}</em>
+                  <em className="italic text-gray-700 dark:text-gray-300">{children}</em>
                 ),
               }}
             >
@@ -282,7 +290,7 @@ export default function BlogPostPage() {
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
                   <Image
-                    src="/placeholder.svg?height=120&width=120&text=Author"
+                    src="/self.jpg?height=120&width=120&text=Author"
                     alt="Yaw Asante"
                     width={120}
                     height={120}
@@ -290,8 +298,8 @@ export default function BlogPostPage() {
                   />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">About Yaw Asante</h3>
-                  <p className="text-gray-600 mb-4 leading-relaxed">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">About Yaw Asante</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
                     MPhil Economics student at KNUST with a passion for making economics and AI accessible to everyone.
                     Specializes in applied econometrics, data science, and productivity tools for academic research.
                   </p>
@@ -313,7 +321,7 @@ export default function BlogPostPage() {
       {/* Related Posts */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-black">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Articles</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Related Articles</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {relatedPosts.map((post) => (
               <Card key={post.id} className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
@@ -324,8 +332,8 @@ export default function BlogPostPage() {
                   <Badge variant="secondary" className="text-xs mb-2">
                     {post.category}
                   </Badge>
-                  <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{post.title}</h3>
-                  <p className="text-sm text-gray-600 mb-3">{new Date(post.created_at).toLocaleDateString()}</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-400 mb-2 line-clamp-2">{post.title}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{new Date(post.created_at).toLocaleDateString()}</p>
                   <Button variant="ghost" size="sm" className="p-0 h-auto text-blue-600 hover:text-blue-700" asChild>
                     <Link href={`/blog/${post.slug}`}>Read More →</Link>
                   </Button>

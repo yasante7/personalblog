@@ -18,7 +18,7 @@ export default function HomePage() {
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                 Making Economics & AI
-                <span className="text-blue-600 dark:text-blue-400"> Accessible</span>
+                <span className="text-blue-600"> Accessible</span>
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
                 MPhil Economics student at KNUST, passionate about bridging the gap between complex economic theories
