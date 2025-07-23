@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Navbar } from "@/app/components/navbar"
 import { Footer } from "@/app/components/footer"
+import { Newsletter } from "@/components/newsletter"
 
 export default function HomePage() {
   return (
@@ -18,11 +19,11 @@ export default function HomePage() {
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                 Making Economics & AI
-                <span className="text-blue-600"> Accessible</span>
+                <span className="text-blue-600 dark:text-blue-400"> Accessible</span>
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                MPhil Economics student at KNUST, passionate about bridging the gap between complex economic theories
-                and practical AI applications for students and professionals.
+                Learn more about Economics, Data Science and AI Breakthroughs. 
+                Explore the various AI tools and learn how to leverage them to increase your productivity as a Student, Industry Professional or a Researcher.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
@@ -56,7 +57,7 @@ export default function HomePage() {
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-black border-t-2">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Areas of Expertise</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Blog and Projects Coverage</h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Combining economic theory with cutting-edge technology to solve real-world problems
             </p>
@@ -76,7 +77,7 @@ export default function HomePage() {
                 <TrendingUp className="h-12 w-12 text-green-600 dark:text-green-400 mx-auto mb-4" />
                 <h3 className="font-semibold text-lg mb-2 dark:text-white">Data Science & Econometrics</h3>
                 <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  Advanced statistical analysis and econometric modeling using Python and R
+                  Advanced statistical analysis and econometric modeling using Python, R and Stata
                 </p>
               </CardContent>
             </Card>
@@ -93,7 +94,7 @@ export default function HomePage() {
               <CardContent className="p-6 text-center">
                 <Users className="h-12 w-12 text-orange-600 dark:text-orange-400 mx-auto mb-4" />
                 <h3 className="font-semibold text-lg mb-2 dark:text-white">Student Resources</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">Curating valuable resources and perks for fellow students</p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Curating valuable resources and perks for students</p>
               </CardContent>
             </Card>
           </div>
@@ -107,9 +108,8 @@ export default function HomePage() {
             <CardContent className="p-8">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">About Me</h2>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-                I&apos;m currently pursuing my MPhil in Economics at Yaw Nkrumah University of Science and Technology
-                (KNUST), where I focus on the intersection of economic theory and modern technology. My passion lies in
-                making complex economic concepts accessible to students and professionals alike.
+                I&apos;m currently pursuing MPhil in Economics at Kwame Nkrumah University of Science and Technology
+                (KNUST). My passion lies in leveraging AI tools to create data solutions that allow researchers and industry experts achieve optimal results.
               </p>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
                 With expertise in Python, data science, and various AI tools, I bridge the gap between traditional

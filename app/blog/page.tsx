@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Navbar } from "@/app/components/navbar"
+import { Newsletter } from "@/components/newsletter"
 import { usePosts } from "@/hooks/retriever"
 import { useState } from "react"
 
@@ -189,22 +190,7 @@ export default function BlogPage() {
 
       {/* Newsletter Signup */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-50 dark:bg-black">
-        < Card className="max-w-4xl mx-auto text-center p-8">
-          <CardHeader>
-            <h2 className="text-3xl font-bold text-blue-900 mb-4">Stay Updated</h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-              Get the latest insights on AI tools, economics, and student resources delivered to your inbox.
-            </p>
-          </CardHeader>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <Button className="bg-blue-600 hover:bg-blue-700">Subscribe</Button>
-          </div>
-        </Card>
+        <Newsletter />
       </section>
     </div>
   )

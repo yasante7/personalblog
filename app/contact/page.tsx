@@ -1,13 +1,88 @@
+"use client"
+
 import Link from "next/link"
+import { useState } from "react"
 import { Mail, Linkedin, Github, MapPin, Phone, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { useToast } from "@/hooks/use-toast"
 import { Navbar } from "@/app/components/navbar"
 
+interface FormData {
+  firstName: string
+  lastName: string
+  email: string
+  subject: string
+  message: string
+}
+
 export default function ContactPage() {
+  const [formData, setFormData] = useState<FormData>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    subject: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { toast } = useToast()
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        toast({
+          title: "Message sent successfully!",
+          description: "Thank you for your message. I'll get back to you soon.",
+        })
+        // Reset form
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          subject: '',
+          message: ''
+        })
+      } else {
+        toast({
+          title: "Error sending message",
+          description: result.error || "Something went wrong. Please try again.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error sending message",
+        description: "Network error. Please check your connection and try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black">
       {/* Navigation */}
@@ -37,31 +112,67 @@ export default function ContactPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <form className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="firstName">First Name</Label>
-                      <Input id="firstName" placeholder="Your first name" />
+                      <Input 
+                        id="firstName" 
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        placeholder="Your first name" 
+                        required 
+                      />
                     </div>
                     <div>
                       <Label htmlFor="lastName">Last Name</Label>
-                      <Input id="lastName" placeholder="Your last name" />
+                      <Input 
+                        id="lastName" 
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        placeholder="Your last name" 
+                        required 
+                      />
                     </div>
                   </div>
                   <div>
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="your.email@example.com" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="your.email@example.com" 
+                      required 
+                    />
                   </div>
                   <div>
                     <Label htmlFor="subject">Subject</Label>
-                    <Input id="subject" placeholder="What's this about?" />
+                    <Input 
+                      id="subject" 
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      placeholder="What's this about?" 
+                      required 
+                    />
                   </div>
                   <div>
                     <Label htmlFor="message">Message</Label>
-                    <Textarea id="message" placeholder="Tell me more about your inquiry..." rows={6} />
+                    <Textarea 
+                      id="message" 
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Tell me more about your inquiry..." 
+                      rows={6} 
+                      required 
+                    />
                   </div>
-                  <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
-                    Send Message
+                  <Button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
               </CardContent>

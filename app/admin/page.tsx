@@ -85,14 +85,14 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black">
       {/* Admin Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-4">
-              <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
-              <span className="text-sm text-gray-500">Kwame Asante's Website</span>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-gray-300">Admin Panel</h1>
+              <span className="text-sm text-gray-500 dark:text-gray-300">Yaw Asante's Website</span>
             </div>
             <div className="flex items-center gap-4">
               <Button variant="outline" asChild>
@@ -172,14 +172,14 @@ export default function AdminDashboard() {
           <div className="lg:col-span-3 space-y-8">
             {/* Stats Overview */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Dashboard Overview</h2>
+              <h2 className="text-2xl font-bold mb-6">Dashboard Overview</h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Total Posts</p>
-                        <p className="text-3xl font-bold text-gray-900">{dashboardStats.totalPosts}</p>
+                        <p className="text-sm font-medium">Total Posts</p>
+                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.totalPosts}</p>
                       </div>
                       <FileText className="h-8 w-8 text-blue-600" />
                     </div>
@@ -191,8 +191,8 @@ export default function AdminDashboard() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Projects</p>
-                        <p className="text-3xl font-bold text-gray-900">{dashboardStats.totalProjects}</p>
+                        <p className="text-sm font-medium">Projects</p>
+                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.totalProjects}</p>
                       </div>
                       <FolderOpen className="h-8 w-8 text-green-600" />
                     </div>
@@ -204,8 +204,8 @@ export default function AdminDashboard() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Monthly Views</p>
-                        <p className="text-3xl font-bold text-gray-900">
+                        <p className="text-sm font-medium ">Monthly Views</p>
+                        <p className="text-3xl font-bold text-gray-700">
                           {dashboardStats.monthlyViews.toLocaleString()}
                         </p>
                       </div>
@@ -219,8 +219,8 @@ export default function AdminDashboard() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Subscribers</p>
-                        <p className="text-3xl font-bold text-gray-900">{dashboardStats.subscribers}</p>
+                        <p className="text-sm font-medium ">Subscribers</p>
+                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.subscribers}</p>
                       </div>
                       <Users className="h-8 w-8 text-orange-600" />
                     </div>
@@ -232,8 +232,8 @@ export default function AdminDashboard() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Comments</p>
-                        <p className="text-3xl font-bold text-gray-900">{dashboardStats.comments}</p>
+                        <p className="text-sm font-medium ">Comments</p>
+                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.comments}</p>
                       </div>
                       <MessageSquare className="h-8 w-8 text-pink-600" />
                     </div>
@@ -245,8 +245,8 @@ export default function AdminDashboard() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-600">Messages</p>
-                        <p className="text-3xl font-bold text-gray-900">{dashboardStats.contactMessages}</p>
+                        <p className="text-sm font-medium ">Messages</p>
+                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.contactMessages}</p>
                       </div>
                       <Mail className="h-8 w-8 text-red-600" />
                     </div>
@@ -258,7 +258,7 @@ export default function AdminDashboard() {
 
             {/* Quick Actions */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+              <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
               <div className="flex flex-wrap gap-3">
                 <Button asChild>
                   <Link href="/admin/posts/new">New Blog Post</Link>
@@ -288,7 +288,7 @@ export default function AdminDashboard() {
                   {recentPosts.map((post) => (
                     <div key={post.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex-1">
-                        <h4 className="font-medium text-gray-900 mb-1">{post.title}</h4>
+                        <h4 className="font-medium text-gray-300 mb-1">{post.title}</h4>
                         <div className="flex items-center gap-4 text-sm text-gray-500">
                           <span className="flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
@@ -337,7 +337,7 @@ export default function AdminDashboard() {
                     <div key={comment.id} className="p-4 border rounded-lg">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <p className="font-medium text-gray-900">{comment.author}</p>
+                          <p className="font-medium text-gray-300">{comment.author}</p>
                           <p className="text-sm text-gray-500">on "{comment.post}"</p>
                         </div>
                         <div className="flex items-center gap-2">
@@ -353,7 +353,7 @@ export default function AdminDashboard() {
                           <span className="text-xs text-gray-500">{new Date(comment.date).toLocaleDateString()}</span>
                         </div>
                       </div>
-                      <p className="text-gray-700 text-sm mb-3">{comment.comment}</p>
+                      <p className="text-gray-600 text-sm mb-3">{comment.comment}</p>
                       {comment.status === "pending" && (
                         <div className="flex gap-2">
                           <Button size="sm" variant="outline">

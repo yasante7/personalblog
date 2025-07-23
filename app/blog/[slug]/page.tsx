@@ -13,7 +13,7 @@ import { useParams } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import ReactMarkdown from "react-markdown"
-import remarkGfm from "remark-gfm"
+import { Newsletter } from "@/components/newsletter"
 
 export default function BlogPostPage() {
   const params = useParams()
@@ -270,7 +270,7 @@ export default function BlogPostPage() {
 
           {/* Tags */}
           <div className="mt-12 pt-8 border-t">
-            <h3 className="font-semibold text-gray-900 mb-4">Tags:</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Tags:</h3>
             <div className="flex flex-wrap gap-2">
               {post.tags?.map((tag) => (
                 <Badge key={tag} variant="secondary" className="text-sm">
@@ -300,8 +300,7 @@ export default function BlogPostPage() {
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">About Yaw Asante</h3>
                   <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
-                    MPhil Economics student at KNUST with a passion for making economics and AI accessible to everyone.
-                    Specializes in applied econometrics, data science, and productivity tools for academic research.
+                    I'm Yaw Asante, an MPhil Economics student at KNUST with a strong interest in data science, policy research, and sustainable development. I hold a Bachelor's degree in Economics and Geography and have worked on projects related to monetary policy, renewable energy, and climate change adaptation in Ghana. I enjoy applying tools like Python, STATA, and R to real-world problems and have experience in teaching, research, and community development.
                   </p>
                   <div className="flex gap-3">
                     <Button size="sm" variant="outline" asChild>
@@ -345,23 +344,9 @@ export default function BlogPostPage() {
       </section>
 
       {/* Newsletter CTA */}
-      <Card className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-50 dark:bg-black">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Never Miss an Update</h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Get the latest insights on AI tools, economics, and student resources delivered to your inbox weekly.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <Button className="bg-blue-600 hover:bg-blue-700 px-8">Subscribe</Button>
-          </div>
-          <p className="text-sm text-gray-500 mt-4">Join 500+ students already subscribed. Unsubscribe anytime.</p>
-        </div>
-      </Card>
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-50 dark:bg-black">
+        <Newsletter />
+      </section>
     </div>
   )
 }
