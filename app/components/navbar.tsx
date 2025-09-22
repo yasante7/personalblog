@@ -36,7 +36,7 @@ export function Navbar() {
                         Blog
                     </Link>
                     <Link href="/projects" className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
-                        Projects
+                        Econ Resources
                     </Link>
                     <Link href="/contact" className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
                         Contact

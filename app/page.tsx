@@ -32,7 +32,7 @@ export default function HomePage() {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg">
-                  <Link href="/projects">View Projects</Link>
+                  <Link href="/projects">Econ Resources</Link>
                 </Button>
               </div>
             </div>
