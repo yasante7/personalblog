@@ -32,7 +32,7 @@ export default function HomePage() {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg">
-                  <Link href="/projects">Econ Resources</Link>
+                  <Link href="/resources">Econ Resources</Link>
                 </Button>
               </div>
             </div>
@@ -57,7 +57,7 @@ export default function HomePage() {
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-black border-t-2">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Blog and Projects Coverage</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Blog and Economic Resource Coverage</h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Combining economic theory with cutting-edge technology to solve real-world problems
             </p>

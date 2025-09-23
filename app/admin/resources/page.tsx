@@ -125,7 +125,7 @@ export default function ResourcesManagement() {
                 </Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/projects">
+                <Link href="/resources">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   View Live Page
                 </Link>
@@ -253,7 +253,7 @@ export default function ResourcesManagement() {
                         </Link>
                       </Button>
                       <Button size="sm" variant="outline" asChild>
-                        <Link href={`/projects#resource-${resource.id}`}>
+                        <Link href={`/resources#resource-${resource.id}`}>
                           <Eye className="h-4 w-4" />
                         </Link>
                       </Button>
