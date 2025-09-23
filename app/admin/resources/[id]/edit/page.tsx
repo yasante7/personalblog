@@ -3,8 +3,9 @@
 import Link from "next/link"
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { getResource, updateResource } from "@/lib/supabase";
+import { getResource, updateResource, STORAGE_BUCKETS } from "@/lib/supabase";
 import { generateSlug } from "@/lib/utils";
+import { ImageUpload } from "@/components/image-upload";
 import { 
   Save, 
   ArrowLeft, 
@@ -276,12 +277,12 @@ export default function EditResource() {
               </div>
 
               <div>
-                <Label htmlFor="imageUrl">Image URL</Label>
-                <Input
-                  id="imageUrl"
+                <Label>Resource Image</Label>
+                <ImageUpload
                   value={formData.imageUrl}
-                  onChange={(e) => handleInputChange('imageUrl', e.target.value)}
-                  placeholder="https://example.com/image.jpg"
+                  onChange={(url) => handleInputChange('imageUrl', url || '')}
+                  folder="resources"
+                  placeholder="Upload an image for this resource"
                 />
               </div>
             </CardContent>

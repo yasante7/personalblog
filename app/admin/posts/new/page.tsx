@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { supabase, testConnection } from "@/lib/supabase"
+import { ImageUpload } from "@/components/image-upload"
+import { supabase, testConnection, STORAGE_BUCKETS } from "@/lib/supabase"
 import { toast } from "sonner" // Install: npm install sonner
 import dynamic from "next/dynamic"
 
@@ -406,20 +407,12 @@ Start typing to see the live preview!`,
                 <CardTitle>Featured Image</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-600 mb-2">Drop an image here or click to upload</p>
-                    <Button variant="outline" size="sm">
-                      Choose File
-                    </Button>
-                  </div>
-                  <Input
-                    placeholder="Or enter image URL..."
-                    value={featuredImage}
-                    onChange={(e) => setFeaturedImage(e.target.value)}
-                  />
-                </div>
+                <ImageUpload
+                  value={featuredImage}
+                  onChange={(url) => setFeaturedImage(url || "")}
+                  folder="posts"
+                  placeholder="Upload a featured image for your post"
+                />
               </CardContent>
             </Card>
 

@@ -14,6 +14,13 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
   }
 })
 
+// Storage bucket configuration
+export const STORAGE_BUCKETS = {
+  IMAGES: 'images',
+  POSTS: 'posts',
+  RESOURCES: 'resources'
+} as const
+
 // Test connection function
 export const testConnection = async () => {
   try {

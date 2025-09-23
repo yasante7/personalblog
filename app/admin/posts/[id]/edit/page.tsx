@@ -10,8 +10,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ImageUpload } from "@/components/image-upload"
 import { toast } from "sonner"
-import { supabase } from "@/lib/supabase"
+import { supabase, STORAGE_BUCKETS } from "@/lib/supabase"
 import { usePostBySlug } from "@/hooks/retriever"
 import dynamic from "next/dynamic"
 
@@ -151,6 +152,13 @@ export default function EditPostPage() {
       // Update local status if it was changed
       if (newStatus) {
         setStatus(newStatus)
+      }
+      
+      // Redirect to admin dashboard after publishing
+      if (newStatus === "published") {
+        setTimeout(() => {
+          router.push("/admin")
+        }, 1000) // Small delay to show the success message
       }
       
       setIsSaving(false)
@@ -333,13 +341,12 @@ export default function EditPostPage() {
               </div>
 
               <div>
-                <Label htmlFor="coverImage">Cover Image URL</Label>
-                <Input
-                  id="coverImage"
+                <Label>Cover Image</Label>
+                <ImageUpload
                   value={coverImage}
-                  onChange={(e) => setCoverImage(e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                  className="mt-1"
+                  onChange={(url) => setCoverImage(url || "")}
+                  folder="posts"
+                  placeholder="Upload a cover image for your post"
                 />
               </div>
             </CardContent>

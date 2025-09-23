@@ -71,13 +71,35 @@ The schema includes sample data to test the dashboard:
 - 4 sample economics resources
 - Proper categorization and metadata
 
-## 6. Testing the Dashboard
+## 6. Image Upload Setup
+
+### Storage Buckets
+1. Run the `supabase-storage-setup.sql` script in your Supabase SQL Editor
+2. This creates three storage buckets:
+   - `images`: General images
+   - `posts`: Blog post images  
+   - `resources`: Resource images
+
+### Features
+- **Drag & Drop Upload**: Visual upload interface with preview
+- **File Validation**: Automatic type and size validation
+- **Progress Indicators**: Loading states and error handling
+- **Image Management**: Upload, preview, and delete functionality
+
+### Usage in Admin Panel
+- **Posts**: Featured/cover image upload in create/edit forms
+- **Resources**: Resource image upload in create/edit forms
+- **Automatic Organization**: Images are organized by type in separate folders
+
+## 7. Testing the Dashboard
 
 1. Run the SQL schema in Supabase
-2. Set up environment variables
-3. Start your development server: `npm run dev`
-4. Navigate to `/admin` (will redirect to login if needed)
-5. View real-time statistics and sample data
+2. Run the storage setup script for image uploads
+3. Set up environment variables
+4. Start your development server: `npm run dev`
+5. Navigate to `/admin` (will redirect to login if needed)
+6. View real-time statistics and sample data
+7. Test image uploads in post/resource creation
 
 ## 7. Customization
 
