@@ -87,7 +87,7 @@ export function Navbar() {
                             className="block px-3 py-2 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
                             onClick={() => setIsOpen(false)}
                         >
-                            Projects
+                            Econ Resources
                         </Link>
                         <Link 
                             href="/contact" 

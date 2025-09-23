@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button"
 // Mock data - in a real app, this would come from your database
 const dashboardStats = {
   totalPosts: 12,
-  totalProjects: 6,
+  totalResources: 8,
   monthlyViews: 2847,
   subscribers: 523,
   comments: 89,
@@ -129,11 +129,11 @@ export default function AdminDashboard() {
                     Blog Posts
                   </Link>
                   <Link
-                    href="/admin/projects"
+                    href="/admin/resources"
                     className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                   >
                     <FolderOpen className="h-4 w-4" />
-                    Projects
+                    Econ Resources
                   </Link>
                   <Link
                     href="/admin/subscribers"
@@ -191,12 +191,12 @@ export default function AdminDashboard() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium">Projects</p>
-                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.totalProjects}</p>
+                        <p className="text-sm font-medium">Econ Resources</p>
+                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.totalResources}</p>
                       </div>
                       <FolderOpen className="h-8 w-8 text-green-600" />
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">+1 this month</p>
+                    <p className="text-xs text-gray-500 mt-2">+2 this month</p>
                   </CardContent>
                 </Card>
 
@@ -264,7 +264,7 @@ export default function AdminDashboard() {
                   <Link href="/admin/posts/new">New Blog Post</Link>
                 </Button>
                 <Button variant="outline" asChild>
-                  <Link href="/admin/projects/new">Add Project</Link>
+                  <Link href="/admin/resources/new">Add Resource</Link>
                 </Button>
                 <Button variant="outline" asChild>
                   <Link href="/admin/analytics">View Analytics</Link>
