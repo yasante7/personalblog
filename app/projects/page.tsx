@@ -49,14 +49,20 @@ const getCategoryColor = (category: string) => {
 export default function EconResourcesPage() {
   const [resources, setResources] = useState<Resource[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   
   useEffect(() => {
     fetchResources()
   }, [])
   
-  const fetchResources = async () => {
+  const fetchResources = async (category?: string) => {
     try {
-      const result = await getResources({ status: 'published' })
+      setIsLoading(true)
+      const filters: { status: 'published'; category?: string } = { status: 'published' }
+      if (category) {
+        filters.category = category
+      }
+      const result = await getResources(filters)
       if (result.success && result.data) {
         setResources(result.data)
       }
@@ -79,6 +85,30 @@ export default function EconResourcesPage() {
     }
   }
 
+  const handleCategoryFilter = (category: string) => {
+    if (selectedCategory === category) {
+      // If already selected, clear filter
+      setSelectedCategory(null)
+      fetchResources()
+    } else {
+      // Set new category filter
+      setSelectedCategory(category)
+      fetchResources(category)
+      // Scroll to resources section
+      setTimeout(() => {
+        const resourcesSection = document.querySelector('[data-section="featured-resources"]')
+        if (resourcesSection) {
+          resourcesSection.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 100)
+    }
+  }
+
+  const clearCategoryFilter = () => {
+    setSelectedCategory(null)
+    fetchResources()
+  }
+
   const featuredResources = resources.filter((resource) => resource.is_featured)
   const otherResources = resources.filter((resource) => !resource.is_featured)
 
@@ -95,13 +125,28 @@ export default function EconResourcesPage() {
             A curated collection of free resources, lecture materials, online courses, and opportunities to help economics 
             students excel in their studies and prepare for graduate school and careers.
           </p>
+          {selectedCategory && (
+            <div className="mt-6 flex justify-center">
+              <div className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-4 py-2 rounded-full flex items-center gap-2">
+                <span>Filtered by: <strong>{selectedCategory}</strong></span>
+                <button 
+                  onClick={clearCategoryFilter}
+                  className="ml-2 text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Featured Resources */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8">
+      <section className="py-12 px-4 sm:px-6 lg:px-8" data-section="featured-resources">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Featured Resources</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">
+            {selectedCategory ? `Featured ${selectedCategory}` : 'Featured Resources'}
+          </h2>
           {isLoading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -109,7 +154,12 @@ export default function EconResourcesPage() {
             </div>
           ) : featuredResources.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-600">No featured resources available yet.</p>
+              <p className="text-gray-600">
+                {selectedCategory 
+                  ? `No featured resources available for ${selectedCategory} yet.`
+                  : 'No featured resources available yet.'
+                }
+              </p>
             </div>
           ) : (
             <div className="grid lg:grid-cols-2 gap-8">
@@ -191,9 +241,30 @@ export default function EconResourcesPage() {
       {/* Other Resources */}
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Additional Resources</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {otherResources.map((resource) => (
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">
+            {selectedCategory ? `Additional ${selectedCategory}` : 'Additional Resources'}
+          </h2>
+          {otherResources.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">
+                {selectedCategory 
+                  ? `No additional resources available for ${selectedCategory} yet.`
+                  : 'No additional resources available yet.'
+                }
+              </p>
+              {selectedCategory && (
+                <Button 
+                  variant="outline" 
+                  onClick={clearCategoryFilter}
+                  className="mt-4"
+                >
+                  View All Resources
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {otherResources.map((resource) => (
               <Card key={resource.id} className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
                 <div className="relative h-40">
                   <Image src={resource.image_url || "/placeholder.svg"} alt={resource.title} fill className="object-cover" />
@@ -276,17 +347,26 @@ export default function EconResourcesPage() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* Resource Categories Overview */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-100 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">Explore by Category</h2>
+          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900 dark:text-white">Explore by Category</h2>
+          <p className="text-center text-gray-600 dark:text-gray-400 mb-12">Click on any category to filter resources</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="text-center hover:shadow-lg transition-shadow">
+            <Card 
+              className={`text-center hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                selectedCategory === 'Lecture Materials' 
+                  ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+                  : 'hover:bg-white dark:hover:bg-gray-800'
+              }`}
+              onClick={() => handleCategoryFilter('Lecture Materials')}
+            >
               <CardHeader>
                 <FileText className="h-12 w-12 text-blue-600 mx-auto mb-2" />
                 <CardTitle>Lecture Materials</CardTitle>
@@ -298,7 +378,14 @@ export default function EconResourcesPage() {
               </CardContent>
             </Card>
             
-            <Card className="text-center hover:shadow-lg transition-shadow">
+            <Card 
+              className={`text-center hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                selectedCategory === 'Free Online Courses' 
+                  ? 'ring-2 ring-green-500 bg-green-50 dark:bg-green-900/20' 
+                  : 'hover:bg-white dark:hover:bg-gray-800'
+              }`}
+              onClick={() => handleCategoryFilter('Free Online Courses')}
+            >
               <CardHeader>
                 <Globe className="h-12 w-12 text-green-600 mx-auto mb-2" />
                 <CardTitle>Free Online Courses</CardTitle>
@@ -310,7 +397,14 @@ export default function EconResourcesPage() {
               </CardContent>
             </Card>
             
-            <Card className="text-center hover:shadow-lg transition-shadow">
+            <Card 
+              className={`text-center hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                selectedCategory === 'Data Science Programs' 
+                  ? 'ring-2 ring-purple-500 bg-purple-50 dark:bg-purple-900/20' 
+                  : 'hover:bg-white dark:hover:bg-gray-800'
+              }`}
+              onClick={() => handleCategoryFilter('Data Science Programs')}
+            >
               <CardHeader>
                 <GraduationCap className="h-12 w-12 text-purple-600 mx-auto mb-2" />
                 <CardTitle>Data Science Programs</CardTitle>
@@ -322,7 +416,14 @@ export default function EconResourcesPage() {
               </CardContent>
             </Card>
             
-            <Card className="text-center hover:shadow-lg transition-shadow">
+            <Card 
+              className={`text-center hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                selectedCategory === 'Mentorship Programs' 
+                  ? 'ring-2 ring-orange-500 bg-orange-50 dark:bg-orange-900/20' 
+                  : 'hover:bg-white dark:hover:bg-gray-800'
+              }`}
+              onClick={() => handleCategoryFilter('Mentorship Programs')}
+            >
               <CardHeader>
                 <Users className="h-12 w-12 text-orange-600 mx-auto mb-2" />
                 <CardTitle>Mentorship Programs</CardTitle>
@@ -334,7 +435,14 @@ export default function EconResourcesPage() {
               </CardContent>
             </Card>
             
-            <Card className="text-center hover:shadow-lg transition-shadow">
+            <Card 
+              className={`text-center hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                selectedCategory === 'School Applications' 
+                  ? 'ring-2 ring-pink-500 bg-pink-50 dark:bg-pink-900/20' 
+                  : 'hover:bg-white dark:hover:bg-gray-800'
+              }`}
+              onClick={() => handleCategoryFilter('School Applications')}
+            >
               <CardHeader>
                 <School className="h-12 w-12 text-pink-600 mx-auto mb-2" />
                 <CardTitle>School Applications</CardTitle>
@@ -346,7 +454,14 @@ export default function EconResourcesPage() {
               </CardContent>
             </Card>
             
-            <Card className="text-center hover:shadow-lg transition-shadow">
+            <Card 
+              className={`text-center hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                selectedCategory === 'Study Resources' 
+                  ? 'ring-2 ring-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' 
+                  : 'hover:bg-white dark:hover:bg-gray-800'
+              }`}
+              onClick={() => handleCategoryFilter('Study Resources')}
+            >
               <CardHeader>
                 <BookOpen className="h-12 w-12 text-indigo-600 mx-auto mb-2" />
                 <CardTitle>Study Resources</CardTitle>
