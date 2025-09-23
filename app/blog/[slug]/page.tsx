@@ -88,16 +88,16 @@ export default function BlogPostPage() {
   const readTime = Math.ceil((post.content?.length || 0) / 1000) + " min read"
   const publishedDate = post.published_at ? new Date(post.published_at) : new Date(post.created_at)
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black">
+    <div className="min-h-screen bg-gray-50 dark:bg-black overflow-x-hidden">
       {/* Navigation */}
       < Navbar />
       {/* Back to Blog */}
       <div className="border-b">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Button variant="ghost" asChild className="text-gray-600 dark:text-gray-400 hover:text-gray-900">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+          <Button variant="ghost" asChild className="text-gray-600 dark:text-gray-400 hover:text-gray-900 text-sm sm:text-base">
             <Link href="/blog">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Blog
+              <span className="truncate">Back to Blog</span>
             </Link>
           </Button>
         </div>
@@ -105,7 +105,7 @@ export default function BlogPostPage() {
 
       {/* Article Header */}
       <article className="bg-white dark:bg-black">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           {/* Category Badge */}
           {post.category && (
             <div className="mb-4">
@@ -116,43 +116,45 @@ export default function BlogPostPage() {
           )}
 
           {/* Title */}
-          <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight break-words">
             {post.title}
           </h1>
 
           {/* Meta Information */}
-          <div className="flex flex-wrap items-center gap-6 text-gray-600 dark:text-gray-400 mb-8">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-8">
             <div className="flex items-center gap-2">
-              <User className="h-4 w-4" />
-              <span>Yaw Asante</span>
+              <User className="h-4 w-4 flex-shrink-0" />
+              <span className="truncate">Yaw Asante</span>
             </div>
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              <span>
+              <Calendar className="h-4 w-4 flex-shrink-0" />
+              <span className="truncate">
                 {publishedDate.toLocaleDateString("en-US", {
                   year: "numeric",
-                  month: "long",
+                  month: "short",
                   day: "numeric",
                 })}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              <span>{readTime}</span>
+              <Clock className="h-4 w-4 flex-shrink-0" />
+              <span className="truncate">{readTime}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span>{post.views || 0} views</span>
+              <span className="truncate">{post.views || 0} views</span>
             </div>
           </div>
 
           {/* Featured Image */}
           {post.cover_image && (
-            <div className="relative h-64 md:h-96 mb-8 rounded-lg overflow-hidden">
+            <div className="relative w-full h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[28rem] mb-8 rounded-lg overflow-hidden">
               <Image 
                 src={post.cover_image} 
                 alt={post.title} 
                 fill 
-                className="object-cover"
+                className="object-cover transition-transform duration-300 hover:scale-105"
+                sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1024px"
+                priority
                 onError={(e) => {
                   const img = e.target as HTMLImageElement
                   img.src = "/placeholder.svg?height=400&width=800&text=Blog+Post+Image"
@@ -162,55 +164,57 @@ export default function BlogPostPage() {
           )}
 
           {/* Share Buttons */}
-          <div className="flex items-center gap-4 mb-8 pb-8 border-b">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-400">Share this article:</span>
-            <div className="flex gap-2">
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="text-blue-600 hover:bg-blue-50 dark:text-blue-400 bg-transparent"
-                onClick={() => handleShare('linkedin')}
-              >
-                <Linkedin className="h-4 w-4 mr-1" />
-                LinkedIn
-              </Button>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="text-blue-400 hover:bg-blue-50 dark:text-blue-400 bg-transparent"
-                onClick={() => handleShare('twitter')}
-              >
-                <Twitter className="h-4 w-4 mr-1" />
-                Twitter
-              </Button>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="text-blue-800 hover:bg-blue-50 dark:text-blue-400 bg-transparent"
-                onClick={() => handleShare('facebook')}
-              >
-                <Facebook className="h-4 w-4 mr-1" />
-                Facebook
-              </Button>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="text-gray-600 hover:bg-gray-50 bg-transparent"
-                onClick={handleCopyLink}
-              >
-                <Copy className="h-4 w-4 mr-1" />
-                {copied ? 'Copied!' : 'Copy'}
-              </Button>
+          <div className="mb-8 pb-8 border-b">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-400 flex-shrink-0">Share this article:</span>
+              <div className="flex flex-wrap gap-2">
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="text-blue-600 hover:bg-blue-50 dark:text-blue-400 bg-transparent flex-shrink-0"
+                  onClick={() => handleShare('linkedin')}
+                >
+                  <Linkedin className="h-4 w-4 mr-1" />
+                  <span className="hidden xs:inline">LinkedIn</span>
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="text-blue-400 hover:bg-blue-50 dark:text-blue-400 bg-transparent flex-shrink-0"
+                  onClick={() => handleShare('twitter')}
+                >
+                  <Twitter className="h-4 w-4 mr-1" />
+                  <span className="hidden xs:inline">Twitter</span>
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="text-blue-800 hover:bg-blue-50 dark:text-blue-400 bg-transparent flex-shrink-0"
+                  onClick={() => handleShare('facebook')}
+                >
+                  <Facebook className="h-4 w-4 mr-1" />
+                  <span className="hidden xs:inline">Facebook</span>
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="text-gray-600 hover:bg-gray-50 bg-transparent flex-shrink-0"
+                  onClick={handleCopyLink}
+                >
+                  <Copy className="h-4 w-4 mr-1" />
+                  <span className="hidden xs:inline">{copied ? 'Copied!' : 'Copy'}</span>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </article>
 
       {/* Article Content */}
-      <div className="bg-white dark:bg-black py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-          <div className="prose prose-lg prose-gray max-w-none">
-            <div className="text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed font-light">{post.excerpt}</div>
+      <div className="bg-white dark:bg-black py-8 sm:py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12">
+          <div className="prose prose-sm sm:prose-lg prose-gray max-w-none">
+            <div className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 leading-relaxed font-light">{post.excerpt}</div>
             
             {/* Render markdown content */}
             <ReactMarkdown
@@ -262,6 +266,21 @@ export default function BlogPostPage() {
                 em: ({ children }) => (
                   <em className="italic text-gray-700 dark:text-gray-300">{children}</em>
                 ),
+                img: ({ src, alt, ...props }) => (
+                  <div className="relative w-full max-w-full h-48 sm:h-64 md:h-80 lg:h-96 my-4 sm:my-6 rounded-lg overflow-hidden">
+                    <Image
+                      src={typeof src === 'string' ? src : "/placeholder.svg"}
+                      alt={alt || "Blog image"}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 768px"
+                      onError={(e) => {
+                        const img = e.target as HTMLImageElement
+                        img.src = "/placeholder.svg?height=400&width=600&text=Image"
+                      }}
+                    />
+                  </div>
+                ),
               }}
             >
               {post.content}
@@ -269,11 +288,11 @@ export default function BlogPostPage() {
           </div>
 
           {/* Tags */}
-          <div className="mt-12 pt-8 border-t">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Tags:</h3>
+          <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t">
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">Tags:</h3>
             <div className="flex flex-wrap gap-2">
               {post.tags?.map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-sm">
+                <Badge key={tag} variant="secondary" className="text-xs sm:text-sm">
                   {tag}
                 </Badge>
               ))}
@@ -283,30 +302,30 @@ export default function BlogPostPage() {
       </div>
 
       {/* Author Bio */}
-      <section className="bg-gray-50 dark:bg-black py-12">
+      <section className="bg-gray-50 dark:bg-black py-8 sm:py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card>
-            <CardContent className="p-8">
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex-shrink-0">
+            <CardContent className="p-4 sm:p-6 md:p-8">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                <div className="flex-shrink-0 mx-auto sm:mx-0">
                   <Image
                     src="/self.jpg?height=120&width=120&text=Author"
                     alt="Yaw Asante"
-                    width={120}
-                    height={120}
-                    className="rounded-full"
+                    width={100}
+                    height={100}
+                    className="rounded-full sm:w-[120px] sm:h-[120px]"
                   />
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">About Yaw Asante</h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
+                <div className="flex-1 text-center sm:text-left">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">About Yaw Asante</h3>
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
                     I'm Yaw Asante, an MPhil Economics student at KNUST with a strong interest in data science, policy research, and sustainable development. I hold a Bachelor's degree in Economics and Geography and have worked on projects related to monetary policy, renewable energy, and climate change adaptation in Ghana. I enjoy applying tools like Python, STATA, and R to real-world problems and have experience in teaching, research, and community development.
                   </p>
-                  <div className="flex gap-3">
-                    <Button size="sm" variant="outline" asChild>
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                    <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
                       <Link href="/about">View Profile</Link>
                     </Button>
-                    <Button size="sm" variant="outline" asChild>
+                    <Button size="sm" variant="outline" asChild className="w-full sm:w-auto">
                       <Link href="/contact">Get In Touch</Link>
                     </Button>
                   </div>
@@ -318,22 +337,28 @@ export default function BlogPostPage() {
       </section>
 
       {/* Related Posts */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-black">
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-black">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Related Articles</h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">Related Articles</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {relatedPosts.map((post) => (
               <Card key={post.id} className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-                <div className="relative h-40">
-                  <Image src={post.cover_image || "/placeholder.svg"} alt={post.title} fill className="object-cover" />
+                <div className="relative h-40 sm:h-44 md:h-48">
+                  <Image 
+                    src={post.cover_image || "/placeholder.svg"} 
+                    alt={post.title} 
+                    fill 
+                    className="object-cover transition-transform duration-300 hover:scale-105" 
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 300px"
+                  />
                 </div>
                 <CardContent className="p-4">
                   <Badge variant="secondary" className="text-xs mb-2">
                     {post.category}
                   </Badge>
-                  <h3 className="font-semibold text-gray-900 dark:text-gray-400 mb-2 line-clamp-2">{post.title}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{new Date(post.created_at).toLocaleDateString()}</p>
-                  <Button variant="ghost" size="sm" className="p-0 h-auto text-blue-600 hover:text-blue-700" asChild>
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-400 mb-2 line-clamp-2 text-sm sm:text-base">{post.title}</h3>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">{new Date(post.created_at).toLocaleDateString()}</p>
+                  <Button variant="ghost" size="sm" className="p-0 h-auto text-blue-600 hover:text-blue-700 text-sm" asChild>
                     <Link href={`/blog/${post.slug}`}>Read More →</Link>
                   </Button>
                 </CardContent>
@@ -344,7 +369,7 @@ export default function BlogPostPage() {
       </section>
 
       {/* Newsletter CTA */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-50 dark:bg-black">
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-blue-50 dark:bg-black">
         <Newsletter />
       </section>
     </div>

@@ -165,8 +165,14 @@ export default function EconResourcesPage() {
             <div className="grid lg:grid-cols-2 gap-8">
               {featuredResources.map((resource) => (
               <Card key={resource.id} className="hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-                <div className="relative h-48">
-                  <Image src={resource.image_url || "/placeholder.svg"} alt={resource.title} fill className="object-cover" />
+                <div className="relative h-48 sm:h-56 md:h-64 lg:h-72">
+                  <Image 
+                    src={resource.image_url || "/placeholder.svg"} 
+                    alt={resource.title} 
+                    fill 
+                    className="object-cover transition-transform duration-300 hover:scale-105" 
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 50vw, 500px"
+                  />
                   <div className="absolute top-4 left-4 flex gap-2">
                     <Badge className="bg-blue-600 text-white">Featured</Badge>
                     {resource.is_free && <Badge className="bg-green-600 text-white">Free</Badge>}
@@ -266,8 +272,14 @@ export default function EconResourcesPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {otherResources.map((resource) => (
               <Card key={resource.id} className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-                <div className="relative h-40">
-                  <Image src={resource.image_url || "/placeholder.svg"} alt={resource.title} fill className="object-cover" />
+                <div className="relative h-40 sm:h-44 md:h-48 lg:h-52">
+                  <Image 
+                    src={resource.image_url || "/placeholder.svg"} 
+                    alt={resource.title} 
+                    fill 
+                    className="object-cover transition-transform duration-300 hover:scale-105" 
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 300px"
+                  />
                   {resource.is_free && (
                     <div className="absolute top-3 right-3">
                       <Badge className="bg-green-600 text-white text-xs">Free</Badge>

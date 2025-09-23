@@ -38,13 +38,15 @@ export default function HomePage() {
             </div>
             <div className="flex justify-center">
               <div className="relative">
-                <div className="w-80 h-80 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-full flex items-center justify-center shadow-lg">
+                <div className="w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-full flex items-center justify-center shadow-lg">
                   <Image
                     src="/self.jpg?height=300&width=300"
                     alt="Yaw Asante - MPhil Economics Student"
                     width={300}
                     height={300}
-                    className="rounded-full object-cover"
+                    className="rounded-full object-cover w-60 h-60 sm:w-68 sm:h-68 md:w-76 md:h-76 lg:w-92 lg:h-92"
+                    sizes="(max-width: 640px) 240px, (max-width: 768px) 272px, (max-width: 1024px) 304px, 368px"
+                    priority
                   />
                 </div>
               </div>
