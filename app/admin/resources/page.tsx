@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { supabase, getResources, deleteResource, type Resource } from "@/lib/supabase";
 import { 
   Plus, 
   Edit, 
@@ -20,57 +21,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
-// Mock data - in a real app this would come from your database
-const resources = [
-  {
-    id: 1,
-    title: "Complete Microeconomics Lecture Notes",
-    category: "Lecture Materials",
-    status: "published",
-    featured: true,
-    free: true,
-    views: 1234,
-    downloads: 89,
-    dateCreated: "2024-01-15",
-    lastModified: "2024-01-16"
-  },
-  {
-    id: 2,
-    title: "MIT OpenCourseWare Economics",
-    category: "Free Online Courses",
-    status: "published",
-    featured: true,
-    free: true,
-    views: 2456,
-    downloads: 0,
-    dateCreated: "2024-01-10",
-    lastModified: "2024-01-12"
-  },
-  {
-    id: 3,
-    title: "Python for Economists Bootcamp",
-    category: "Data Science Programs",
-    status: "published",
-    featured: false,
-    free: true,
-    views: 567,
-    downloads: 45,
-    dateCreated: "2024-01-08",
-    lastModified: "2024-01-08"
-  },
-  {
-    id: 4,
-    title: "Economics Graduate School Mentorship",
-    category: "Mentorship Programs",
-    status: "draft",
-    featured: false,
-    free: true,
-    views: 0,
-    downloads: 0,
-    dateCreated: "2024-01-05",
-    lastModified: "2024-01-05"
-  }
-]
 
 const getCategoryIcon = (category: string) => {
   switch (category) {
@@ -108,18 +58,50 @@ const getCategoryColor = (category: string) => {
 
 export default function ResourcesManagement() {
   const router = useRouter();
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
     if (typeof window !== "undefined") {
       const isLoggedIn = localStorage.getItem("admin");
-      if (!isLoggedIn) router.push("/admin/login");
+      if (!isLoggedIn) {
+        router.push("/admin/login");
+        return;
+      }
     }
-  }, []);
 
-  const handleDelete = (id: number) => {
+    fetchResources();
+  }, [router]);
+
+  const fetchResources = async () => {
+    try {
+      const result = await getResources();
+      if (result.success && result.data) {
+        setResources(result.data);
+      } else {
+        console.error('Error fetching resources:', result.error);
+      }
+    } catch (error) {
+      console.error('Error fetching resources:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this resource?")) {
-      // In a real app, you would call your API to delete the resource
-      console.log("Deleting resource:", id);
+      try {
+        const result = await deleteResource(id);
+        if (result.success) {
+          // Remove from local state
+          setResources(resources.filter(resource => resource.id !== id));
+        } else {
+          alert('Error deleting resource: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Error deleting resource:', error);
+        alert('Error deleting resource');
+      }
     }
   };
 
@@ -185,7 +167,7 @@ export default function ResourcesManagement() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Featured</p>
-                  <p className="text-2xl font-bold">{resources.filter(r => r.featured).length}</p>
+                  <p className="text-2xl font-bold">{resources.filter(r => r.is_featured).length}</p>
                 </div>
                 <Eye className="h-8 w-8 text-purple-600" />
               </div>
@@ -211,8 +193,21 @@ export default function ResourcesManagement() {
             <CardTitle>All Resources</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {resources.map((resource) => (
+            {isLoading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                <p className="text-gray-500">Loading resources...</p>
+              </div>
+            ) : resources.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-500">No resources found</p>
+                <Button asChild className="mt-2">
+                  <Link href="/admin/resources/new">Create your first resource</Link>
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {resources.map((resource) => (
                 <div key={resource.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -226,10 +221,10 @@ export default function ResourcesManagement() {
                           <Badge variant={resource.status === 'published' ? 'default' : 'secondary'}>
                             {resource.status}
                           </Badge>
-                          {resource.featured && (
+                          {resource.is_featured && (
                             <Badge className="bg-blue-600 text-white">Featured</Badge>
                           )}
-                          {resource.free && (
+                          {resource.is_free && (
                             <Badge className="bg-green-600 text-white">Free</Badge>
                           )}
                         </div>
@@ -243,10 +238,10 @@ export default function ResourcesManagement() {
                           <span className="font-medium">Downloads:</span> {resource.downloads}
                         </div>
                         <div>
-                          <span className="font-medium">Created:</span> {new Date(resource.dateCreated).toLocaleDateString()}
+                          <span className="font-medium">Created:</span> {new Date(resource.created_at).toLocaleDateString()}
                         </div>
                         <div>
-                          <span className="font-medium">Modified:</span> {new Date(resource.lastModified).toLocaleDateString()}
+                          <span className="font-medium">Modified:</span> {new Date(resource.updated_at).toLocaleDateString()}
                         </div>
                       </div>
                     </div>
@@ -274,7 +269,8 @@ export default function ResourcesManagement() {
                   </div>
                 </div>
               ))}
-            </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

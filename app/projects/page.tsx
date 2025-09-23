@@ -1,111 +1,16 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
+import { useEffect, useState } from "react"
 import { ExternalLink, BookOpen, GraduationCap, Users, FileText, Globe, Award, School } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Navbar } from "../components/navbar"
+import { getResources, incrementResourceViews, incrementResourceDownloads, type Resource } from "@/lib/supabase"
 
-const resources = [
-  {
-    id: 1,
-    title: "Complete Microeconomics Lecture Notes",
-    description:
-      "Comprehensive lecture materials covering consumer theory, producer theory, market structures, and welfare economics. Includes real-world examples and problem sets with solutions.",
-    topics: ["Consumer Theory", "Producer Theory", "Market Structures", "Game Theory", "Welfare Economics"],
-    category: "Lecture Materials",
-    image: "/placeholder.svg?height=200&width=400",
-    downloadUrl: "#",
-    previewUrl: "#",
-    featured: true,
-    free: true,
-  },
-  {
-    id: 2,
-    title: "MIT OpenCourseWare Economics",
-    description:
-      "Access to MIT's complete economics curriculum including video lectures, assignments, and exams. Covers undergraduate and graduate level courses in economics.",
-    topics: ["Principles of Economics", "Intermediate Micro/Macro", "Econometrics", "Development Economics"],
-    category: "Free Online Courses",
-    image: "/placeholder.svg?height=200&width=400",
-    websiteUrl: "https://ocw.mit.edu/courses/economics/",
-    featured: true,
-    free: true,
-  },
-  {
-    id: 3,
-    title: "Python for Economists Bootcamp",
-    description:
-      "Learn data analysis, econometrics, and visualization using Python. Perfect for economics students wanting to develop quantitative skills for research and industry.",
-    topics: ["Python Basics", "Pandas", "Data Visualization", "Econometric Analysis", "Machine Learning"],
-    category: "Data Science Programs",
-    image: "/placeholder.svg?height=200&width=400",
-    websiteUrl: "#",
-    price: "Free",
-    featured: false,
-    free: true,
-  },
-  {
-    id: 4,
-    title: "Economics Graduate School Mentorship",
-    description:
-      "Connect with current graduate students and recent PhD graduates for guidance on applications, research, and career paths in economics.",
-    topics: ["Application Tips", "Research Guidance", "Career Advice", "Networking", "Interview Prep"],
-    category: "Mentorship Programs",
-    image: "/placeholder.svg?height=200&width=400",
-    applyUrl: "#",
-    featured: false,
-    free: true,
-  },
-  {
-    id: 5,
-    title: "Top Economics PhD Programs Guide",
-    description:
-      "Comprehensive guide to applying to top economics PhD programs including application requirements, deadlines, funding information, and admission statistics.",
-    topics: ["Application Requirements", "Program Rankings", "Funding Information", "Deadlines", "Admission Stats"],
-    category: "School Applications",
-    image: "/placeholder.svg?height=200&width=400",
-    downloadUrl: "#",
-    featured: false,
-    free: true,
-  },
-  {
-    id: 6,
-    title: "Coursera Economics Specializations",
-    description:
-      "Curated list of the best economics courses and specializations on Coursera, including financial aid options for students who qualify.",
-    topics: ["Behavioral Economics", "Financial Markets", "Economic Policy", "International Trade"],
-    category: "Free Online Courses",
-    image: "/placeholder.svg?height=200&width=400",
-    websiteUrl: "https://coursera.org",
-    featured: false,
-    free: true,
-  },
-  {
-    id: 7,
-    title: "Macroeconomics Study Materials",
-    description:
-      "Complete study package for macroeconomics including lecture slides, summary notes, practice exams, and economic data analysis exercises.",
-    topics: ["IS-LM Model", "AD-AS Framework", "Growth Theory", "Monetary Policy", "Fiscal Policy"],
-    category: "Lecture Materials",
-    image: "/placeholder.svg?height=200&width=400",
-    downloadUrl: "#",
-    featured: false,
-    free: true,
-  },
-  {
-    id: 8,
-    title: "R for Econometrics Workshop",
-    description:
-      "Learn econometric analysis using R programming. Covers linear regression, time series analysis, panel data methods, and reproducible research practices.",
-    topics: ["R Programming", "Linear Regression", "Time Series", "Panel Data", "Reproducible Research"],
-    category: "Data Science Programs",
-    image: "/placeholder.svg?height=200&width=400",
-    registrationUrl: "#",
-    featured: false,
-    free: true,
-  },
-]
+
 
 const getCategoryIcon = (category: string) => {
   switch (category) {
@@ -142,8 +47,40 @@ const getCategoryColor = (category: string) => {
 }
 
 export default function EconResourcesPage() {
-  const featuredResources = resources.filter((resource) => resource.featured)
-  const otherResources = resources.filter((resource) => !resource.featured)
+  const [resources, setResources] = useState<Resource[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  
+  useEffect(() => {
+    fetchResources()
+  }, [])
+  
+  const fetchResources = async () => {
+    try {
+      const result = await getResources({ status: 'published' })
+      if (result.success && result.data) {
+        setResources(result.data)
+      }
+    } catch (error) {
+      console.error('Error fetching resources:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleResourceClick = async (resourceId: string, actionType: 'view' | 'download') => {
+    try {
+      if (actionType === 'view') {
+        await incrementResourceViews(resourceId)
+      } else if (actionType === 'download') {
+        await incrementResourceDownloads(resourceId)
+      }
+    } catch (error) {
+      console.error('Error tracking resource interaction:', error)
+    }
+  }
+
+  const featuredResources = resources.filter((resource) => resource.is_featured)
+  const otherResources = resources.filter((resource) => !resource.is_featured)
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black">
@@ -165,14 +102,24 @@ export default function EconResourcesPage() {
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Featured Resources</h2>
-          <div className="grid lg:grid-cols-2 gap-8">
-            {featuredResources.map((resource) => (
+          {isLoading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading resources...</p>
+            </div>
+          ) : featuredResources.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">No featured resources available yet.</p>
+            </div>
+          ) : (
+            <div className="grid lg:grid-cols-2 gap-8">
+              {featuredResources.map((resource) => (
               <Card key={resource.id} className="hover:shadow-xl transition-shadow duration-300 overflow-hidden">
                 <div className="relative h-48">
-                  <Image src={resource.image || "/placeholder.svg"} alt={resource.title} fill className="object-cover" />
+                  <Image src={resource.image_url || "/placeholder.svg"} alt={resource.title} fill className="object-cover" />
                   <div className="absolute top-4 left-4 flex gap-2">
                     <Badge className="bg-blue-600 text-white">Featured</Badge>
-                    {resource.free && <Badge className="bg-green-600 text-white">Free</Badge>}
+                    {resource.is_free && <Badge className="bg-green-600 text-white">Free</Badge>}
                   </div>
                 </div>
                 <CardHeader>
@@ -189,33 +136,44 @@ export default function EconResourcesPage() {
                   <div className="mb-4">
                     <h4 className="font-medium text-sm text-gray-900 dark:text-white mb-2">Topics Covered:</h4>
                     <div className="flex flex-wrap gap-1">
-                      {resource.topics.map((topic) => (
+                      {resource.topics?.map((topic) => (
                         <Badge key={topic} variant="outline" className="text-xs">
                           {topic}
                         </Badge>
-                      ))}
+                      )) || <p className="text-sm text-gray-500">No topics listed</p>}
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    {resource.downloadUrl && (
+                    {resource.download_url && (
                       <Button size="sm" variant="outline" asChild>
-                        <Link href={resource.downloadUrl}>
+                        <Link 
+                          href={resource.download_url} 
+                          onClick={() => handleResourceClick(resource.id, 'download')}
+                        >
                           <FileText className="h-4 w-4 mr-1" />
                           Download
                         </Link>
                       </Button>
                     )}
-                    {resource.websiteUrl && (
+                    {resource.website_url && (
                       <Button size="sm" asChild>
-                        <Link href={resource.websiteUrl} target="_blank" rel="noopener noreferrer">
+                        <Link 
+                          href={resource.website_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          onClick={() => handleResourceClick(resource.id, 'view')}
+                        >
                           <ExternalLink className="h-4 w-4 mr-1" />
                           Visit Site
                         </Link>
                       </Button>
                     )}
-                    {resource.previewUrl && (
+                    {resource.preview_url && (
                       <Button size="sm" variant="outline" asChild>
-                        <Link href={resource.previewUrl}>
+                        <Link 
+                          href={resource.preview_url}
+                          onClick={() => handleResourceClick(resource.id, 'view')}
+                        >
                           <BookOpen className="h-4 w-4 mr-1" />
                           Preview
                         </Link>
@@ -225,7 +183,8 @@ export default function EconResourcesPage() {
                 </CardContent>
               </Card>
             ))}
-          </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -237,8 +196,8 @@ export default function EconResourcesPage() {
             {otherResources.map((resource) => (
               <Card key={resource.id} className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
                 <div className="relative h-40">
-                  <Image src={resource.image || "/placeholder.svg"} alt={resource.title} fill className="object-cover" />
-                  {resource.free && (
+                  <Image src={resource.image_url || "/placeholder.svg"} alt={resource.title} fill className="object-cover" />
+                  {resource.is_free && (
                     <div className="absolute top-3 right-3">
                       <Badge className="bg-green-600 text-white text-xs">Free</Badge>
                     </div>
@@ -255,12 +214,12 @@ export default function EconResourcesPage() {
                   <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">{resource.description}</p>
                   <div className="mb-3">
                     <div className="flex flex-wrap gap-1">
-                      {resource.topics.slice(0, 3).map((topic) => (
+                      {resource.topics?.slice(0, 3).map((topic) => (
                         <Badge key={topic} variant="outline" className="text-xs">
                           {topic}
                         </Badge>
                       ))}
-                      {resource.topics.length > 3 && (
+                      {resource.topics && resource.topics.length > 3 && (
                         <Badge variant="outline" className="text-xs">
                           +{resource.topics.length - 3} more
                         </Badge>
@@ -268,33 +227,47 @@ export default function EconResourcesPage() {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    {resource.downloadUrl && (
+                    {resource.download_url && (
                       <Button size="sm" variant="outline" className="flex-1" asChild>
-                        <Link href={resource.downloadUrl}>
+                        <Link 
+                          href={resource.download_url}
+                          onClick={() => handleResourceClick(resource.id, 'download')}
+                        >
                           <FileText className="h-3 w-3 mr-1" />
                           Get
                         </Link>
                       </Button>
                     )}
-                    {resource.websiteUrl && (
+                    {resource.website_url && (
                       <Button size="sm" className="flex-1" asChild>
-                        <Link href={resource.websiteUrl} target="_blank" rel="noopener noreferrer">
+                        <Link 
+                          href={resource.website_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          onClick={() => handleResourceClick(resource.id, 'view')}
+                        >
                           <ExternalLink className="h-3 w-3 mr-1" />
                           Visit
                         </Link>
                       </Button>
                     )}
-                    {resource.applyUrl && (
+                    {resource.apply_url && (
                       <Button size="sm" className="flex-1" asChild>
-                        <Link href={resource.applyUrl}>
+                        <Link 
+                          href={resource.apply_url}
+                          onClick={() => handleResourceClick(resource.id, 'view')}
+                        >
                           <Award className="h-3 w-3 mr-1" />
                           Apply
                         </Link>
                       </Button>
                     )}
-                    {resource.registrationUrl && (
+                    {resource.registration_url && (
                       <Button size="sm" className="flex-1" asChild>
-                        <Link href={resource.registrationUrl}>
+                        <Link 
+                          href={resource.registration_url}
+                          onClick={() => handleResourceClick(resource.id, 'view')}
+                        >
                           <GraduationCap className="h-3 w-3 mr-1" />
                           Register
                         </Link>

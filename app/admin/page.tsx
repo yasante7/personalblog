@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { supabase, getDashboardStats } from "@/lib/supabase";
 
 import {
   BarChart3,
@@ -15,18 +16,20 @@ import {
   Eye,
   MessageSquare,
   Calendar,
+  RefreshCw,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
-// Mock data - in a real app, this would come from your database
-const dashboardStats = {
-  totalPosts: 12,
-  totalResources: 8,
-  monthlyViews: 2847,
-  subscribers: 523,
-  comments: 89,
-  contactMessages: 15,
+interface DashboardStats {
+  totalPosts: number
+  totalResources: number
+  monthlyViews: number
+  subscribers: number
+  comments: number
+  contactMessages: number
+  recentPostsCount?: number
+  recentResourcesCount?: number
 }
 
 const recentPosts = [
@@ -77,12 +80,75 @@ const recentComments = [
 
 export default function AdminDashboard() {
   const router = useRouter();
+  const [dashboardStats, setDashboardStats] = useState<DashboardStats>({
+    totalPosts: 0,
+    totalResources: 0,
+    monthlyViews: 0,
+    subscribers: 0,
+    comments: 0,
+    contactMessages: 0,
+  });
+  const [recentPosts, setRecentPosts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("admin");
+      router.push("/admin/login");
+    }
+  };
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const isLoggedIn = localStorage.getItem("admin");
-      if (!isLoggedIn) router.push("/admin/login");
+      if (!isLoggedIn) {
+        router.push("/admin/login");
+        return;
+      }
     }
-  }, []);
+
+    fetchDashboardData();
+  }, [router]);
+
+  const fetchDashboardData = async () => {
+    try {
+      // Fetch dashboard statistics
+      const statsResult = await getDashboardStats();
+      
+      // Fetch recent posts
+      const { data: recentPostsData, error: recentPostsError } = await supabase
+        .from('posts')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      if (statsResult.success && statsResult.data) {
+        setDashboardStats({
+          totalPosts: statsResult.data.totalPosts,
+          totalResources: statsResult.data.totalResources,
+          monthlyViews: statsResult.data.monthlyViews,
+          subscribers: statsResult.data.subscribers,
+          comments: statsResult.data.comments,
+          contactMessages: statsResult.data.contactMessages,
+          recentPostsCount: statsResult.data.recentPostsCount,
+          recentResourcesCount: statsResult.data.recentResourcesCount,
+        });
+      } else {
+        console.error('Error fetching dashboard stats:', statsResult.error);
+        // Set fallback values if stats fetch fails
+        setDashboardStats(prev => prev);
+      }
+
+      if (!recentPostsError && recentPostsData) {
+        setRecentPosts(recentPostsData);
+      }
+
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black">
@@ -98,7 +164,7 @@ export default function AdminDashboard() {
               <Button variant="outline" asChild>
                 <Link href="/">View Site</Link>
               </Button>
-              <Button variant="outline">Logout</Button>
+              <Button variant="outline" onClick={handleLogout}>Logout</Button>
             </div>
           </div>
         </div>
@@ -172,18 +238,42 @@ export default function AdminDashboard() {
           <div className="lg:col-span-3 space-y-8">
             {/* Stats Overview */}
             <div>
-              <h2 className="text-2xl font-bold mb-6">Dashboard Overview</h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Dashboard Overview</h2>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={fetchDashboardData}
+                  disabled={isLoading}
+                  className="flex items-center gap-2"
+                >
+                  <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                  Refresh
+                </Button>
+              </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium">Total Posts</p>
-                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.totalPosts}</p>
+                        <p className="text-3xl font-bold text-gray-700 dark:text-gray-300">
+                          {isLoading ? (
+                            <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-16 rounded"></span>
+                          ) : (
+                            dashboardStats.totalPosts
+                          )}
+                        </p>
                       </div>
                       <FileText className="h-8 w-8 text-blue-600" />
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">+2 this month</p>
+                    <p className="text-xs text-gray-500 mt-2">
+                      {isLoading ? (
+                        <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-3 w-20 rounded"></span>
+                      ) : (
+                        `+${dashboardStats.recentPostsCount || 0} this month`
+                      )}
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -192,11 +282,23 @@ export default function AdminDashboard() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium">Econ Resources</p>
-                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.totalResources}</p>
+                        <p className="text-3xl font-bold text-gray-700 dark:text-gray-300">
+                          {isLoading ? (
+                            <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-16 rounded"></span>
+                          ) : (
+                            dashboardStats.totalResources
+                          )}
+                        </p>
                       </div>
                       <FolderOpen className="h-8 w-8 text-green-600" />
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">+2 this month</p>
+                    <p className="text-xs text-gray-500 mt-2">
+                      {isLoading ? (
+                        <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-3 w-20 rounded"></span>
+                      ) : (
+                        `+${dashboardStats.recentResourcesCount || 0} this month`
+                      )}
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -204,14 +306,24 @@ export default function AdminDashboard() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium ">Monthly Views</p>
-                        <p className="text-3xl font-bold text-gray-700">
-                          {dashboardStats.monthlyViews.toLocaleString()}
+                        <p className="text-sm font-medium">Monthly Views</p>
+                        <p className="text-3xl font-bold text-gray-700 dark:text-gray-300">
+                          {isLoading ? (
+                            <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-20 rounded"></span>
+                          ) : (
+                            dashboardStats.monthlyViews.toLocaleString()
+                          )}
                         </p>
                       </div>
                       <Eye className="h-8 w-8 text-purple-600" />
                     </div>
-                    <p className="text-xs text-green-600 mt-2">+12% from last month</p>
+                    <p className="text-xs text-green-600 mt-2">
+                      {isLoading ? (
+                        <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-3 w-24 rounded"></span>
+                      ) : (
+                        "All-time views"
+                      )}
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -219,12 +331,24 @@ export default function AdminDashboard() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium ">Subscribers</p>
-                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.subscribers}</p>
+                        <p className="text-sm font-medium">Subscribers</p>
+                        <p className="text-3xl font-bold text-gray-700 dark:text-gray-300">
+                          {isLoading ? (
+                            <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-16 rounded"></span>
+                          ) : (
+                            dashboardStats.subscribers
+                          )}
+                        </p>
                       </div>
                       <Users className="h-8 w-8 text-orange-600" />
                     </div>
-                    <p className="text-xs text-green-600 mt-2">+23 this week</p>
+                    <p className="text-xs text-green-600 mt-2">
+                      {isLoading ? (
+                        <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-3 w-20 rounded"></span>
+                      ) : (
+                        "Newsletter subscribers"
+                      )}
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -232,12 +356,24 @@ export default function AdminDashboard() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium ">Comments</p>
-                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.comments}</p>
+                        <p className="text-sm font-medium">Comments</p>
+                        <p className="text-3xl font-bold text-gray-700 dark:text-gray-300">
+                          {isLoading ? (
+                            <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-16 rounded"></span>
+                          ) : (
+                            dashboardStats.comments
+                          )}
+                        </p>
                       </div>
                       <MessageSquare className="h-8 w-8 text-pink-600" />
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">5 pending approval</p>
+                    <p className="text-xs text-gray-500 mt-2">
+                      {isLoading ? (
+                        <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-3 w-20 rounded"></span>
+                      ) : (
+                        "Coming soon"
+                      )}
+                    </p>
                   </CardContent>
                 </Card>
 
@@ -245,12 +381,24 @@ export default function AdminDashboard() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium ">Messages</p>
-                        <p className="text-3xl font-bold text-gray-700">{dashboardStats.contactMessages}</p>
+                        <p className="text-sm font-medium">Messages</p>
+                        <p className="text-3xl font-bold text-gray-700 dark:text-gray-300">
+                          {isLoading ? (
+                            <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-8 w-16 rounded"></span>
+                          ) : (
+                            dashboardStats.contactMessages
+                          )}
+                        </p>
                       </div>
                       <Mail className="h-8 w-8 text-red-600" />
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">3 unread</p>
+                    <p className="text-xs text-gray-500 mt-2">
+                      {isLoading ? (
+                        <span className="inline-block animate-pulse bg-gray-300 dark:bg-gray-600 h-3 w-20 rounded"></span>
+                      ) : (
+                        "Coming soon"
+                      )}
+                    </p>
                   </CardContent>
                 </Card>
               </div>
@@ -285,40 +433,54 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {recentPosts.map((post) => (
-                    <div key={post.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex-1">
-                        <h4 className="font-medium text-gray-300 mb-1">{post.title}</h4>
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
-                          <span className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            {new Date(post.date).toLocaleDateString()}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Eye className="h-3 w-3" />
-                            {post.views} views
-                          </span>
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs ${
-                              post.status === "published"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-yellow-100 text-yellow-800"
-                            }`}
-                          >
-                            {post.status}
-                          </span>
+                  {isLoading ? (
+                    <div className="text-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                      <p className="text-gray-500">Loading posts...</p>
+                    </div>
+                  ) : recentPosts.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500">No posts found</p>
+                      <Button asChild className="mt-2">
+                        <Link href="/admin/posts/new">Create your first post</Link>
+                      </Button>
+                    </div>
+                  ) : (
+                    recentPosts.map((post) => (
+                      <div key={post.id} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900 dark:text-gray-300 mb-1">{post.title}</h4>
+                          <div className="flex items-center gap-4 text-sm text-gray-500">
+                            <span className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              {new Date(post.created_at).toLocaleDateString()}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Eye className="h-3 w-3" />
+                              {post.views} views
+                            </span>
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs ${
+                                post.status === "published"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-yellow-100 text-yellow-800"
+                              }`}
+                            >
+                              {post.status}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button size="sm" variant="outline" asChild>
+                            <Link href={`/admin/posts/${post.id}/edit`}>Edit</Link>
+                          </Button>
+                          <Button size="sm" variant="ghost" asChild>
+                            <Link href={`/blog/${post.slug}`}>View</Link>
+                          </Button>
                         </div>
                       </div>
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline" asChild>
-                          <Link href={`/admin/posts/${post.id}/edit`}>Edit</Link>
-                        </Button>
-                        <Button size="sm" variant="ghost" asChild>
-                          <Link href={`/blog/${post.id}`}>View</Link>
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>

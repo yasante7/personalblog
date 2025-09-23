@@ -3,6 +3,8 @@
 import Link from "next/link"
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { createResource } from "@/lib/supabase";
+import { generateSlug } from "@/lib/utils";
 import { 
   Save, 
   ArrowLeft, 
@@ -102,16 +104,41 @@ export default function NewResource() {
     setIsSubmitting(true)
 
     try {
-      // In a real app, you would send this to your API
-      console.log('Submitting resource:', formData)
+      // Generate slug from title
+      const slug = generateSlug(formData.title)
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      // Prepare resource data
+      const resourceData = {
+        title: formData.title,
+        slug: slug,
+        description: formData.description,
+        category: formData.category,
+        topics: formData.topics.length > 0 ? formData.topics : null,
+        status: 'published' as const,
+        is_featured: formData.featured,
+        is_free: formData.free,
+        views: 0,
+        downloads: 0,
+        download_url: formData.downloadUrl || null,
+        website_url: formData.websiteUrl || null,
+        preview_url: formData.previewUrl || null,
+        apply_url: formData.applyUrl || null,
+        registration_url: formData.registrationUrl || null,
+        image_url: formData.imageUrl || null,
+        author_id: null, // You might want to set this based on the logged-in user
+        published_at: new Date().toISOString()
+      }
+
+      const result = await createResource(resourceData)
       
-      // Redirect to resources list
-      router.push('/admin/resources')
+      if (result.success) {
+        router.push('/admin/resources')
+      } else {
+        alert('Error creating resource: ' + result.error)
+      }
     } catch (error) {
       console.error('Error creating resource:', error)
+      alert('Error creating resource')
     } finally {
       setIsSubmitting(false)
     }

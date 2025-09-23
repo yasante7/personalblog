@@ -52,6 +52,30 @@ export type Post = {
   cover_image: string | null
 }
 
+export type Resource = {
+  id: string
+  title: string
+  slug: string
+  description: string
+  category: string
+  topics: string[] | null
+  status: 'draft' | 'published' | 'scheduled'
+  is_featured: boolean | null
+  is_free: boolean | null
+  views: number
+  downloads: number
+  download_url: string | null
+  website_url: string | null
+  preview_url: string | null
+  apply_url: string | null
+  registration_url: string | null
+  image_url: string | null
+  author_id: string | null
+  created_at: string
+  updated_at: string
+  published_at: string | null
+}
+
 export type Subscriber = {
   id: string
   email: string
@@ -123,5 +147,270 @@ export const subscribeToNewsletter = async (email: string) => {
   } catch (err) {
     console.error('Subscription error:', err)
     return { success: false, error: 'An unexpected error occurred' }
+  }
+}
+
+// Resource management functions
+export const createResource = async (resourceData: Omit<Resource, 'id' | 'created_at' | 'updated_at'>) => {
+  try {
+    const { data, error } = await supabase
+      .from('resources')
+      .insert([{
+        ...resourceData,
+        updated_at: new Date().toISOString()
+      }])
+      .select()
+
+    if (error) {
+      console.error('Error creating resource:', error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true, data: data[0] }
+  } catch (err) {
+    console.error('Create resource error:', err)
+    return { success: false, error: 'An unexpected error occurred' }
+  }
+}
+
+export const updateResource = async (id: string, resourceData: Partial<Resource>) => {
+  try {
+    const { data, error } = await supabase
+      .from('resources')
+      .update({
+        ...resourceData,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+
+    if (error) {
+      console.error('Error updating resource:', error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true, data: data[0] }
+  } catch (err) {
+    console.error('Update resource error:', err)
+    return { success: false, error: 'An unexpected error occurred' }
+  }
+}
+
+export const deleteResource = async (id: string) => {
+  try {
+    const { error } = await supabase
+      .from('resources')
+      .delete()
+      .eq('id', id)
+
+    if (error) {
+      console.error('Error deleting resource:', error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true }
+  } catch (err) {
+    console.error('Delete resource error:', err)
+    return { success: false, error: 'An unexpected error occurred' }
+  }
+}
+
+export const getResource = async (id: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('resources')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) {
+      console.error('Error fetching resource:', error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true, data }
+  } catch (err) {
+    console.error('Get resource error:', err)
+    return { success: false, error: 'An unexpected error occurred' }
+  }
+}
+
+export const getResources = async (filters?: { 
+  status?: string
+  category?: string
+  is_featured?: boolean
+  limit?: number
+  offset?: number
+}) => {
+  try {
+    let query = supabase
+      .from('resources')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (filters?.status) {
+      query = query.eq('status', filters.status)
+    }
+
+    if (filters?.category) {
+      query = query.eq('category', filters.category)
+    }
+
+    if (filters?.is_featured !== undefined) {
+      query = query.eq('is_featured', filters.is_featured)
+    }
+
+    if (filters?.limit) {
+      query = query.limit(filters.limit)
+    }
+
+    if (filters?.offset) {
+      query = query.range(filters.offset, filters.offset + (filters.limit || 10) - 1)
+    }
+
+    const { data, error } = await query
+
+    if (error) {
+      console.error('Error fetching resources:', error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true, data }
+  } catch (err) {
+    console.error('Get resources error:', err)
+    return { success: false, error: 'An unexpected error occurred' }
+  }
+}
+
+export const incrementResourceViews = async (id: string) => {
+  try {
+    // First get the current views
+    const { data: resource, error: fetchError } = await supabase
+      .from('resources')
+      .select('views')
+      .eq('id', id)
+      .single()
+      
+    if (fetchError) {
+      console.error('Error fetching resource:', fetchError)
+      return { success: false, error: fetchError.message }
+    }
+    
+    // Then update with incremented value
+    const { data, error } = await supabase
+      .from('resources')
+      .update({ views: (resource.views || 0) + 1 })
+      .eq('id', id)
+      .select('views')
+    
+    if (error) {
+      console.error('Error incrementing views:', error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true, data: data[0] }
+  } catch (err) {
+    console.error('Increment views error:', err)
+    return { success: false, error: 'An unexpected error occurred' }
+  }
+}
+export const incrementResourceDownloads = async (id: string) => {
+  try {
+    // First get the current downloads
+    const { data: resource, error: fetchError } = await supabase
+      .from('resources')
+      .select('downloads')
+      .eq('id', id)
+      .single()
+      
+    if (fetchError) {
+      console.error('Error fetching resource:', fetchError)
+      return { success: false, error: fetchError.message }
+    }
+    
+    // Then update with incremented value
+    const { data, error } = await supabase
+      .from('resources')
+      .update({ downloads: (resource.downloads || 0) + 1 })
+      .eq('id', id)
+      .select('downloads')
+
+    if (error) {
+      console.error('Error incrementing downloads:', error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true, data: data[0] }
+  } catch (err) {
+    console.error('Increment downloads error:', err)
+    return { success: false, error: 'An unexpected error occurred' }
+  }
+}
+
+// Dashboard statistics functions
+export const getDashboardStats = async () => {
+  try {
+    // Get counts for all main entities
+    const [
+      { count: postsCount, error: postsError },
+      { count: resourcesCount, error: resourcesError },
+      { count: subscribersCount, error: subscribersError }
+    ] = await Promise.all([
+      supabase.from('posts').select('*', { count: 'exact', head: true }),
+      supabase.from('resources').select('*', { count: 'exact', head: true }),
+      supabase.from('subscribers').select('*', { count: 'exact', head: true })
+    ]);
+
+    // Calculate total views across all posts and resources
+    const { data: postViews } = await supabase
+      .from('posts')
+      .select('views');
+    
+    const { data: resourceViews } = await supabase
+      .from('resources')
+      .select('views');
+
+    const totalPostViews = postViews?.reduce((sum, post) => sum + (post.views || 0), 0) || 0;
+    const totalResourceViews = resourceViews?.reduce((sum, resource) => sum + (resource.views || 0), 0) || 0;
+    const monthlyViews = totalPostViews + totalResourceViews;
+
+    // Get recent activity (posts from last 30 days)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+    const { count: recentPostsCount } = await supabase
+      .from('posts')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', thirtyDaysAgo.toISOString());
+
+    const { count: recentResourcesCount } = await supabase
+      .from('resources')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', thirtyDaysAgo.toISOString());
+
+    if (postsError || resourcesError || subscribersError) {
+      console.error('Error fetching dashboard stats:', { postsError, resourcesError, subscribersError });
+      return { 
+        success: false, 
+        error: postsError?.message || resourcesError?.message || subscribersError?.message 
+      };
+    }
+
+    return {
+      success: true,
+      data: {
+        totalPosts: postsCount || 0,
+        totalResources: resourcesCount || 0,
+        monthlyViews,
+        subscribers: subscribersCount || 0,
+        recentPostsCount: recentPostsCount || 0,
+        recentResourcesCount: recentResourcesCount || 0,
+        comments: 0, // Would need a comments table
+        contactMessages: 0, // Would need a contact messages table
+      }
+    };
+  } catch (err) {
+    console.error('Get dashboard stats error:', err);
+    return { success: false, error: 'An unexpected error occurred' };
   }
 }

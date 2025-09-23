@@ -3,6 +3,8 @@
 import Link from "next/link"
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { getResource, updateResource } from "@/lib/supabase";
+import { generateSlug } from "@/lib/utils";
 import { 
   Save, 
   ArrowLeft, 
@@ -47,22 +49,7 @@ interface FormData {
   imageUrl: string
 }
 
-// Mock data for the resource being edited
-const mockResource = {
-  id: 1,
-  title: "Complete Microeconomics Lecture Notes",
-  description: "Comprehensive lecture materials covering consumer theory, producer theory, market structures, and welfare economics. Includes real-world examples and problem sets with solutions.",
-  category: "Lecture Materials",
-  topics: ["Consumer Theory", "Producer Theory", "Market Structures", "Game Theory", "Welfare Economics"],
-  featured: true,
-  free: true,
-  downloadUrl: "#",
-  websiteUrl: "",
-  previewUrl: "#",
-  applyUrl: "",
-  registrationUrl: "",
-  imageUrl: "/placeholder.svg?height=200&width=400"
-}
+
 
 export default function EditResource() {
   const router = useRouter();
@@ -94,14 +81,33 @@ export default function EditResource() {
       }
     }
 
-    // Load resource data (in a real app, this would be an API call)
+    // Load resource data
     const loadResource = async () => {
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500))
-        setFormData(mockResource)
+        const result = await getResource(params.id as string)
+        if (result.success && result.data) {
+          const resource = result.data
+          setFormData({
+            title: resource.title,
+            description: resource.description,
+            category: resource.category,
+            topics: resource.topics || [],
+            featured: resource.is_featured || false,
+            free: resource.is_free || true,
+            downloadUrl: resource.download_url || '',
+            websiteUrl: resource.website_url || '',
+            previewUrl: resource.preview_url || '',
+            applyUrl: resource.apply_url || '',
+            registrationUrl: resource.registration_url || '',
+            imageUrl: resource.image_url || ''
+          })
+        } else {
+          console.error('Error loading resource:', result.error)
+          alert('Error loading resource: ' + result.error)
+        }
       } catch (error) {
         console.error('Error loading resource:', error)
+        alert('Error loading resource')
       } finally {
         setIsLoading(false)
       }
@@ -139,16 +145,36 @@ export default function EditResource() {
     setIsSubmitting(true)
 
     try {
-      // In a real app, you would send this to your API
-      console.log('Updating resource:', params.id, formData)
+      // Generate slug from title
+      const slug = generateSlug(formData.title)
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      // Prepare update data
+      const updateData = {
+        title: formData.title,
+        slug: slug,
+        description: formData.description,
+        category: formData.category,
+        topics: formData.topics.length > 0 ? formData.topics : null,
+        is_featured: formData.featured,
+        is_free: formData.free,
+        download_url: formData.downloadUrl || null,
+        website_url: formData.websiteUrl || null,
+        preview_url: formData.previewUrl || null,
+        apply_url: formData.applyUrl || null,
+        registration_url: formData.registrationUrl || null,
+        image_url: formData.imageUrl || null,
+      }
+
+      const result = await updateResource(params.id as string, updateData)
       
-      // Redirect to resources list
-      router.push('/admin/resources')
+      if (result.success) {
+        router.push('/admin/resources')
+      } else {
+        alert('Error updating resource: ' + result.error)
+      }
     } catch (error) {
       console.error('Error updating resource:', error)
+      alert('Error updating resource')
     } finally {
       setIsSubmitting(false)
     }
