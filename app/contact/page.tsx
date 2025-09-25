@@ -189,7 +189,7 @@ export default function ContactPage() {
                     <Mail className="h-5 w-5 text-blue-600" />
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-gray-600">yasante2@student.knust.edu.gh</p>
+                      <p className="text-gray-600">yasante.official@gmail.com</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -203,7 +203,7 @@ export default function ContactPage() {
                     <Phone className="h-5 w-5 text-purple-600" />
                     <div>
                       <p className="font-medium">Phone</p>
-                      <p className="text-gray-600">+233 XX XXX XXXX</p>
+                      <p className="text-gray-600">+233 54 359 2218</p>
                     </div>
                   </div>
                 </CardContent>
@@ -216,7 +216,7 @@ export default function ContactPage() {
                 <CardContent>
                   <div className="space-y-3">
                     <Link
-                      href="#"
+                      href="https://www.linkedin.com/in/yasante7/"
                       className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-500 transition-colors"
                     >
                       <Linkedin className="h-5 w-5 text-blue-600" />
@@ -226,7 +226,7 @@ export default function ContactPage() {
                       </div>
                     </Link>
                     <Link
-                      href="#"
+                      href="https://github.com/yasante7/"
                       className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-500 transition-colors"
                     >
                       <Github className="h-5 w-5 text-gray-900" />
@@ -236,7 +236,7 @@ export default function ContactPage() {
                       </div>
                     </Link>
                     <Link
-                      href="mailto:Yaw.asante@student.knust.edu.gh"
+                      href="mailto:yasante.official@gmail.com"
                       className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-500 transition-colors"
                     >
                       <Mail className="h-5 w-5 text-red-600" />
@@ -248,7 +248,7 @@ export default function ContactPage() {
                   </div>
                 </CardContent>
               </Card>
-
+{/* 
               <Card>
                 <CardHeader>
                   <CardTitle>Office Hours</CardTitle>
@@ -270,7 +270,7 @@ export default function ContactPage() {
                   </div>
                   <p className="text-xs text-gray-500 mt-3">Response time: Usually within 24 hours</p>
                 </CardContent>
-              </Card>
+              </Card> */}
             </div>
           </div>
         </div>

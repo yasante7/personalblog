@@ -122,7 +122,7 @@ export default function EconResourcesPage() {
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Economics Resources Hub</h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            A curated collection of free resources, lecture materials, online courses, and opportunities to help economics 
+            A curated collection of free resources, lecture materials, online courses, and opportunities to help 
             students excel in their studies and prepare for graduate school and careers.
           </p>
           {selectedCategory && (

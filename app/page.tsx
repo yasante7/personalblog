@@ -44,8 +44,8 @@ export default function HomePage() {
                     alt="Yaw Asante - MPhil Economics Student"
                     width={300}
                     height={300}
-                    className="rounded-full object-cover w-60 h-60 sm:w-68 sm:h-68 md:w-76 md:h-76 lg:w-92 lg:h-92"
-                    sizes="(max-width: 640px) 240px, (max-width: 768px) 272px, (max-width: 1024px) 304px, 368px"
+                    className="w-full h-full rounded-full object-cover"
+                    sizes="(max-width: 640px) 256px, (max-width: 768px) 288px, (max-width: 1024px) 320px, 384px"
                     priority
                   />
                 </div>

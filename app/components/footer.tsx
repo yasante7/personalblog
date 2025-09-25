@@ -12,13 +12,13 @@ export function Footer() {
               MPhil Economics Student at KNUST, passionate about AI, data science, and making economics accessible.
             </p>
             <div className="flex space-x-4">
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+              <Link href="https://github.com/yasante7/" className="text-gray-400 hover:text-white transition-colors">
                 <Github className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+              <Link href="https://www.linkedin.com/in/yasante7/" className="text-gray-400 hover:text-white transition-colors">
                 <Linkedin className="h-5 w-5" />
               </Link>
-              <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
+              <Link href="mailto:yasante.official@gmail.com" className="text-gray-400 hover:text-white transition-colors">
                 <Mail className="h-5 w-5" />
               </Link>
             </div>

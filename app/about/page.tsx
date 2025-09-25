@@ -50,20 +50,30 @@ export default function AboutPage() {
                     Academic Background
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h3 className="font-semibold text-lg">MPhil Economics</h3>
-                    <p className="text-gray-600 dark:text-gray-300">Kwame Nkrumah University of Science and Technology (KNUST)</p>
-                    <p className="text-sm text-gray-500">2025 - Present</p>
+                <CardContent className="space-y-6 text-gray-700 dark:text-gray-400">
+                  <div className="space-y-1">
+                    <div className="flex justify-between mb-2">
+                      <h3 className="text-lg font-medium text-gray-800 dark:text-white">MPhil Economics</h3>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm">Jan. 2025 - Present</p>
+                    </div>
+                    <div className="flex justify-between">
+                      <p className="text-gray-600 dark:text-gray-300 font-semibold">Kwame Nkrumah University of Science and Technology (KNUST)</p>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mb-2">Kumasi - Ghana</p>
+                    </div>
                   </div>
-                  <p className="text-gray-700 dark:text-gray-400 leading-relaxed">
-                    Currently pursuing Master of Philosophy in Economics with a focus on applied microeconomics, and development
-                    economics.
-                  </p>
-                  <div>
-                    <h3 className="font-semibold text-lg">BA Economics</h3>
-                    <p className="text-gray-600 dark:text-gray-300">Kwame Nkrumah University of Science and Technology (KNUST)</p>
-                    <p className="text-sm text-gray-500">2019 - 2023</p>
+                    {/* <p className="text-gray-700 dark:text-gray-400 leading-relaxed">
+                      Currently pursuing Master of Philosophy in Economics with a focus on applied microeconomics, and development
+                      economics.
+                    </p> */}
+                  <div className="space-y-1">
+                    <div className="flex justify-between mb-2">
+                      <h3 className="text-lg font-medium text-gray-800 dark:text-white">BA Economics</h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Sept. 2019 - Nov. 2023</p>
+                    </div>
+                    <div className="flex justify-between mb-2">
+                      <p className="text-gray-600 dark:text-gray-300 font-semibold">Kwame Nkrumah University of Science and Technology (KNUST)</p>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm">Kumasi - Ghana</p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -76,28 +86,15 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent className="space-y-6 text-gray-700 dark:text-gray-400">
 
-                  {/* Monetary Policy Research */}
-                  <div className="space-y-1">
-                    <h4 className="text-lg font-medium text-gray-800 dark:text-white">
-                      Department of Economics – KNUST
-                    </h4>
-                    <p className="font-semibold">Topic: Monetary Policy and Macroeconomic Performance in Ghana</p>
-                    <p className=" text-gray-600 dark:text-gray-400">Kumasi, Ghana • 2023</p>
-                    <ul className="list-disc list-inside space-y-1">
-                      <li>Objective: Examine the effectiveness of monetary policy in stabilizing price levels and promoting economic growth in Ghana</li>
-                      <li>Method: Autoregressive Distributed Lag (ARDL) model</li>
-                      <li>Result: Positive relationship between monetary policy and inflation in both short and long run; mixed effects on real GDP</li>
-                      <li>Supervisor: Prof. Grace Nkansah Asante</li>
-                    </ul>
-                  </div>
-
                   {/* Research Assistantship – Renewable Energy */}
                   <div className="space-y-1">
-                    <h4 className="text-lg font-medium text-gray-800 dark:text-white">
-                      Research Assistantship – Department of Economics, KNUST
-                    </h4>
+                    <div className="flex justify-between text-sm mb-2">
+                      <h4 className="text-lg font-medium text-gray-800 dark:text-white">
+                        Research Assistant – Department of Economics, KNUST
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-400">Jan. 2024 - March 2024</p>
+                    </div>
                     <p className="font-semibold">Topic: Impact of Renewable Energy on Carbon Emissions</p>
-                    <p className="text-gray-600 dark:text-gray-400">Kumasi, Ghana • Jan. 2024 - March 2024</p>
                     <ul className="list-disc list-inside space-y-1">
                       <li>Objective: Analyze the role of renewable energy consumption in reducing carbon emissions</li>
                       <li>Method: ARDL regression-based approach</li>
@@ -108,29 +105,55 @@ export default function AboutPage() {
 
                   {/* Enumerator – Food & Climate Change */}
                   <div className="space-y-1">
-                    <h4 className="text-lg font-medium text-gray-800 dark:text-white">
-                      Enumerator – Department of Economics, KNUST
-                    </h4>
+                    <div className="flex justify-between text-sm mb-2">
+                      <h4 className="text-lg font-medium text-gray-800 dark:text-white">
+                        Research Assistant – Department of Economics, KNUST
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-400">October 2024</p>
+                    </div>
                     <p className="font-semibold">Topic: Food Consumption and Adaptation to Climate Change: The Case of Ghana</p>
-                    <p className="text-gray-600 dark:text-gray-400">Kumasi, Ghana • October 2024</p>
                     <ul className="list-disc list-inside space-y-1">
-                      <li>Objective: Understand the effects of climate change on food production and farmers’ adaptation strategies</li>
-                      <li>Lead Researchers: Dr. Prince Boakye Frimpong, Dr. Frank Adusah‑Poku, Dr. John Bosco Dramani</li>
-                      <li>Role: Enumerator</li>
+                      <li>Objective: Examine the effects of climate change on food production and how farmers adapt</li>
+                      <li>Lead Researchers: Prof. John Bosco Dramani, Dr. Prince Boakye Frimpong, Dr. Frank Adusah‑Poku</li>
+                      <li>Role: Data Enumerator and Data Cleaning</li>
+                      {/* Create an Italicized text for a special function performed*/}
+                      {/* <li className="italic text-sm text-gray-500">
+                        Collapsed climate data in .netcd file to a dataframe to allow processing with Stata
+                      </li> */}
                     </ul>
                   </div>
 
                   {/* Enumerator & Team Lead – Solar Market */}
                   <div className="space-y-1">
-                    <h4 className="text-lg font-medium text-gray-800 dark:text-white">
-                      Enumerator & Team Lead – Brew-Hammond Energy Centre, KNUST
-                    </h4>
-                    <p className="font-semibold">Topic: Market Development and Capacity Building for the Supply of Solar Products in Ghana</p>
-                    <p className="text-gray-600 dark:text-gray-400">Kumasi, Ghana • November 2024</p>
+                    <div className="flex justify-between text-sm mb-2">
+                      <h4 className="text-lg font-medium text-gray-800 dark:text-white">
+                        Enumerator & Team Lead – Brew-Hammond Energy Centre, KNUST
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-400">November 2024</p>
+                    </div>
+                    <p className="font-semibold">Topic: Market Development and Capacity Building for the Supply of Solar Products in Ghana.</p>
                     <ul className="list-disc list-inside space-y-1">
-                      <li>Objective: Identify key drivers of market development and capacity building for solar product supply chains</li>
-                      <li>Lead Researchers: Dr. Prince Boakye Frimpong, Dr. Frank Adusah‑Poku, Dr. John Bosco Dramani</li>
+                      <li>Objective: Identify key drivers of market development and capacity building for solar product supply chain in Ghana.</li>
+                      <li>Lead Researchers: Prof. John Bosco Dramani, Dr. Prince Boakye Frimpong, Dr. Frank Adusah‑Poku</li>
                       <li>Role: Enumerator and Team Leader</li>
+                    </ul>
+                  </div>
+
+                  {/* Monetary Policy Research */}
+                  <div className="space-y-1">
+                    {/* Put location and date at the margins apart */}
+                    <div className="flex justify-between text-sm mb-2">
+                      <h4 className="text-lg font-medium text-gray-800 dark:text-white">
+                        Dissertation - Department of Economics, KNUST
+                      </h4>
+                      <p className=" text-gray-500 ">September, 2023</p>
+                    </div>
+                    <p className="font-semibold">Topic: Monetary Policy and Macroeconomic Performance in Ghana</p>
+                    <ul className="list-disc list-inside space-y-1">
+                      <li>Objective: Examine the effectiveness of monetary policy in stabilizing price levels and promoting economic growth in Ghana</li>
+                      <li>Method: Autoregressive Distributed Lag (ARDL) model</li>
+                      <li>Result: Positive relationship between monetary policy and inflation in both short and long run; mixed effects on real GDP</li>
+                      <li>Supervisor: Prof. Grace Nkansah Asante</li>
                     </ul>
                   </div>
                 </CardContent>
@@ -200,22 +223,28 @@ export default function AboutPage() {
                   
                   {/* Python for Data Science */}
                   <div className="space-y-1">
-                    <h4 className="text-lg font-medium text-gray-800 dark:text-white">
-                      Lead Organizer, May 2023<br />
-                      <span className="text-blue-600 font-semibold">Python for Data Science —  Virtual</span>
-                    </h4>
+                    <div className="flex justify-between text-sm mb-2">
+                      <h4 className="text-lg font-medium text-gray-800 dark:text-white">
+                        Lead Organizer - Virtual
+                      </h4>
+                      <p className=" text-gray-500 ">May, 2023</p>
+                    </div>
+                    <p className="text-blue-600 font-semibold">Python for Data Science Workshop</p>
                     <ul className="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1 pl-2">
                       <li>Collaborated with 4 Data Scientists from Ghana and Cameroon</li>
-                      <li>Trained ~180 participants on data science applications for real-world problems</li>
-                      <li>Led the session on <span className="font-semibold text-gray-800 dark:text-gray-200">NumPy for Data Scientists</span></li>
+                      <li>Trained about 180 participants on data science applications for real-world problems</li>
+                      <li>Led the session on <span className="italic">NumPy for Data Science</span></li>
                     </ul>
                   </div>
 
                   {/* Teaching Assistantship */}
                   <div className="space-y-1">
-                    <h4 className="text-lg font-medium text-gray-800 dark:text-white">
-                      Teaching Assistantship <span className="text-gray-300">—Nov. 2023 - Sept. 2024</span>
-                    </h4>
+                    <div className="flex justify-between text-sm mb-2">
+                      <h4 className="text-lg font-medium text-gray-800 dark:text-white">
+                        Teaching Assistant
+                      </h4>
+                      <p className=" text-gray-500 ">Nov. 2023 - Sept. 2024</p>
+                    </div>
                     <p className="text-gray-600 dark:text-gray-400">
                       <span className="text-blue-600 font-semibold">Department of Economics, KNUST</span>
                     </p>
@@ -237,7 +266,7 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div>
-                    <h4 className="font-medium text-sm">Economic Analysis of Forestry Resource Allocation in Ghana: Trends, Optimal Utilization, and Sustainable Management Strategies</h4>
+                    <h4 className="font-medium text-sm">Optimal Allocation and Sustainable Management of Ghana’s Forest Resources: A Dynamic Optimization Approach</h4>
                     <p className="text-xs text-gray-600 dark:text-gray-400">Term Paper, Resource Economics</p>
                   </div>
                   {/* <div>
